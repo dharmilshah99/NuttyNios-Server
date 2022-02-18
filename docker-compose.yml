@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+
+    volumes:
+      - ./mosquitto/config/:/mosquitto/config
+    ports:
+      - 1883:1883
+      - 9001:9001
