@@ -22,6 +22,8 @@ class MQTT(object):
         is_connected = False
         while not is_connected:
             try:
+                self.client.username_pw_set(username="", password="")
+                self.client.tls_set(ca_certs="", certfile="", keyfile="")
                 self.client.on_connect = self.on_connect
                 self.client.on_message = self.on_message
                 self.client.connect(self.hostname, self.port)
