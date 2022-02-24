@@ -6,7 +6,7 @@ services:
     volumes:
       - ./mosquitto/config/:/mosquitto/config
     ports:
-      - 1883:11883
+      - 31883:11883
 
   mosquitto-bridge:
     image: eclipse-mosquitto:latest
