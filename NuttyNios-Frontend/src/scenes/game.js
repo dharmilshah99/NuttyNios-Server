@@ -2,6 +2,8 @@ import Phaser from 'phaser'
 
 class Game extends Phaser.Scene
 {
+    refreshFrameTimer = Phaser.Time.TimerEvent;
+    refreshFrameInterval = 1000
     init()
     {
         this.Score = 0
@@ -14,6 +16,14 @@ class Game extends Phaser.Scene
 
     create()
     {
+        // create timer
+        this.refreshFrameTimer = this.time.addEvent({
+            callback: this.TimerEvent,
+            callbackScope: this,
+            delay: this.refreshFrameInterval,
+            loop: true
+        })
+
         this.arrowUp = this.add.polygon(400, 150, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
         this.arrowUp.setAngle(90)
 
@@ -49,44 +59,40 @@ class Game extends Phaser.Scene
         this.cursors = this.input.keyboard.createCursorKeys() // can access cursor keys, space bar and shift
     }
 
+    // by default phaser updates 60 frames / second
     update()
     {
-
-        for (let i = 0; i < 1000; i++){
-            const dir = Phaser.Math.Between(1,4);
-
-            this.revertarrowColor()
-            
-            if(dir == 1){
-                this.arrowUp.fillColor = 0xff0000
-                
-                // begin timer
-                this.time.delayedCall(2000, this.revertarrowColor());  
-                 // check for keyboard input
-                 this.checkKeyboardInput()            
-            }
-            else if(dir == 2){
-                this.arrowDown.fillColor = 0xff0000
-            }
-            else if(dir == 3){
-                this.arrowLeft.fillColor = 0xff0000
-            }
-            else if(dir == 4){
-                this.arrowRight.fillColor = 0xff0000
-            }
+        if(this.Score == this.Currentscore){
+            this.checkKeyboardInput(this.dir)         
         }
-
-
     }
-dia == 1{}
-            this.arrowUp.fillColor = 0xff0000
-        
     
-    newFrame(a)
+    // this function is called every refreshFrameInterval
+    TimerEvent()
     {
-        
+        // gets a new frame
+        this.Currentscore = this.Score
+        this.dir = Phaser.Math.Between(1,4)
+        this.revertarrowColor()
+        this.setArrowColor()
     }
-if()
+
+    setArrowColor()
+    {
+        if(this.dir==1){
+            this.arrowUp.fillColor = 0xff0000
+        }
+        else if(this.dir==2){
+            this.arrowDown.fillColor = 0xff0000
+        }
+        else if(this.dir==3){
+            this.arrowLeft.fillColor = 0xff0000
+        }
+        else if(this.dir==4){
+            this.arrowRight.fillColor = 0xff0000
+        }
+    }
+
     incrementScore()
     {
         this.Score += 1
@@ -103,7 +109,16 @@ if()
 
     checkKeyboardInput()
     {
-        if(this.cursors.up.isDown){
+        if(this.cursors.up.isDown && this.dir == 1){
+            this.incrementScore()
+        }
+        else if(this.cursors.down.isDown && this.dir == 2){
+            this.incrementScore()
+        }
+        else if(this.cursors.left.isDown && this.dir == 3){
+            this.incrementScore()
+        }
+        else if(this.cursors.right.isDown && this.dir == 4){
             this.incrementScore()
         }
     }
@@ -111,4 +126,3 @@ if()
 }
 
 export default Game
-
