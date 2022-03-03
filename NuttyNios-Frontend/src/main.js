@@ -24,5 +24,4 @@ const game = new Phaser.Game(config) //create game instance
 game.scene.add('titlescreen', TitleScreen) //TitleScreen keyed to string 'titlescreen'
 game.scene.add('game', Game)
 
-//game.scene.start('titlescreen')
-game.scene.start('game')
+game.scene.start('titlescreen')

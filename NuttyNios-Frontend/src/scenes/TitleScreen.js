@@ -1,13 +1,23 @@
 import Phaser from 'phaser'
 
-export default class TitleScreen extends Phaser.Scene //use Modern JavaScript to create clasess
-{   //every scene has preload and create method
-    preload(){
+export default class TitleScreen extends Phaser.Scene
+{
+	preload(){
 
-    }
+	}
+	create()
+	{
+		const title = this.add.text(400, 200, 'Multiplayer Tilt Tilt!', {
+			fontSize: 38
+		})
+		title.setOrigin(0.5, 0.5)
 
-    create(){
-        const text = this.add.text(400, 250, 'Hello, World!')  //(x-pos, y-pos, text)
-        text.setOrigin(0.5, 0.5) //origin of text set to middle (range from 0-1), so that it is centred in window
-    }
+		this.add.text(400, 300, 'Press Space to Start', {
+		})
+		.setOrigin(0.5)
+
+		this.input.keyboard.once('keydown-SPACE', () => {
+			this.scene.start('game')
+		})
+	}
 }
