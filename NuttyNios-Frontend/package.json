@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel src/index.html -p 8000",
+    "start": "parcel src/index.html -p 10000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
