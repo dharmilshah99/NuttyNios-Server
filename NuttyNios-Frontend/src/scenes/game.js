@@ -7,6 +7,7 @@ class Game extends Phaser.Scene
     init()
     {
         this.Score = 0
+        this.NuttyMode = 0
     }
 
     preload()
@@ -56,14 +57,30 @@ class Game extends Phaser.Scene
             .setOrigin(0.5, 0.5)
             .setColor(0xff0000)
 
+        this.NuttyModeLabel = this.add.text(400, 450, 'NUTTY MODE ON!', scoreStyle)
+            .setOrigin(0.5, 0.5)
+
         this.cursors = this.input.keyboard.createCursorKeys() // can access cursor keys, space bar and shift
     }
 
     // by default phaser updates 60 frames / second
     update()
     {
-        if(this.Score == this.Currentscore){
-            this.checkKeyboardInput(this.dir)         
+        this.checkNuttyMode()
+        
+        if(this.NuttyMode == 0)
+        {   
+            this.NuttyModeLabel.setPosition(-10000, -10000)
+            if(this.Score == this.Currentscore){
+                this.checkKeyboardInput()         
+            }
+        }
+        else if(this.NuttyMode == 1)
+        {   
+            this.NuttyModeLabel.setPosition(400, 450)
+            if(this.Score == this.Currentscore){
+                this.checkNuttyKeyboardInput()     
+            }
         }
     }
     
@@ -107,6 +124,13 @@ class Game extends Phaser.Scene
         this.arrowRight.fillColor = 0xffffff
     }
 
+    checkNuttyMode()
+    {
+        if(this.cursors.shift.isDown){
+            this.NuttyMode = !this.NuttyMode
+        }
+    }
+
     checkKeyboardInput()
     {
         if(this.cursors.up.isDown && this.dir == 1){
@@ -119,6 +143,22 @@ class Game extends Phaser.Scene
             this.incrementScore()
         }
         else if(this.cursors.right.isDown && this.dir == 4){
+            this.incrementScore()
+        }
+    }
+
+    checkNuttyKeyboardInput()
+    {
+        if(this.cursors.up.isDown && this.dir == 2){
+            this.incrementScore()
+        }
+        else if(this.cursors.down.isDown && this.dir == 1){
+            this.incrementScore()
+        }
+        else if(this.cursors.left.isDown && this.dir == 4){
+            this.incrementScore()
+        }
+        else if(this.cursors.right.isDown && this.dir == 3){
             this.incrementScore()
         }
     }
