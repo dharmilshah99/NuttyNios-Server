@@ -1,9 +1,14 @@
-FROM python:3.8
+FROM node:17
 
+# Create app directory
 WORKDIR /app
+
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
 
 COPY . .
 
-RUN pip install -r requirements.txt
+EXPOSE 10000
 
-CMD ["python", "-u", "main.py"]
+CMD [ "npm", "run", "start" ]
