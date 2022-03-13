@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 class Game extends Phaser.Scene
 {
     refreshFrameTimer = Phaser.Time.TimerEvent;
-    refreshFrameInterval = 1000
+    refreshFrameInterval = 1000;
     init()
     {
         this.Score = 0
@@ -97,16 +97,16 @@ class Game extends Phaser.Scene
     setArrowColor()
     {
         if(this.dir==1){
-            this.arrowUp.fillColor = 0xff0000
+            this.arrowUp.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
         }
         else if(this.dir==2){
-            this.arrowDown.fillColor = 0xff0000
+            this.arrowDown.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
         }
         else if(this.dir==3){
-            this.arrowLeft.fillColor = 0xff0000
+            this.arrowLeft.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
         }
         else if(this.dir==4){
-            this.arrowRight.fillColor = 0xff0000
+            this.arrowRight.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
         }
     }
 
