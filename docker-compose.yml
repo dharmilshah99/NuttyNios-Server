@@ -23,3 +23,12 @@ services:
       - 49160:10000
     depends_on:
       - mosquitto-bridge
+
+  nuttynios-endpoints:
+    build:
+      context: ./NuttyNios-Endpoints
+      dockerfile: Dockerfile
+    ports:
+      - 18000:18000
+    depends_on:
+      - mosquitto-bridge
