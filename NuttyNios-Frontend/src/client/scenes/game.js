@@ -3,7 +3,9 @@ import Phaser from 'phaser'
 class Game extends Phaser.Scene
 {
     refreshFrameTimer = Phaser.Time.TimerEvent;
+    refreshFrameTimer2 = Phaser.Time.TimerEvent;
     refreshFrameInterval = 1000;
+    refreshFrameInterval2 = 10000;
     init()
     {
         this.Score = 0
@@ -22,6 +24,13 @@ class Game extends Phaser.Scene
             callback: this.TimerEvent,
             callbackScope: this,
             delay: this.refreshFrameInterval,
+            loop: true
+        })
+
+        this.refreshFrameTimer2 = this.time.addEvent({
+            callback: this.TimerEvent2,
+            callbackScope: this,
+            delay: this.refreshFrameInterval2,
             loop: true
         })
 
@@ -81,7 +90,7 @@ class Game extends Phaser.Scene
             if(this.Score == this.Currentscore){
                 this.checkNuttyKeyboardInput()     
             }
-        }
+        }   
     }
     
     // this function is called every refreshFrameInterval
@@ -94,25 +103,36 @@ class Game extends Phaser.Scene
         this.setArrowColor()
     }
 
+    TimerEvent2()
+    {
+        this.revertNuttyMode()
+    }
+
     setArrowColor()
     {
         if(this.dir==1){
-            this.arrowUp.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
+            this.arrowUp.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
         else if(this.dir==2){
-            this.arrowDown.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
+            this.arrowDown.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
         else if(this.dir==3){
-            this.arrowLeft.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
+            this.arrowLeft.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
         else if(this.dir==4){
-            this.arrowRight.fillColor = 0xff0000 + Phaser.Math.Between(100, 50000)
+            this.arrowRight.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
     }
 
     incrementScore()
     {
         this.Score += 1
+        this.ScoreLabel.text = this.Score
+    }
+
+    decrementScore()
+    {
+        this.Score -= 1
         this.ScoreLabel.text = this.Score
     }
 
@@ -126,9 +146,14 @@ class Game extends Phaser.Scene
 
     checkNuttyMode()
     {
-        if(this.cursors.shift.isDown){
-            this.NuttyMode = !this.NuttyMode
-        }
+        this.input.keyboard.once('keydown-SHIFT', () => {
+			this.NuttyMode = !this.NuttyMode
+		})
+    }
+
+    revertNuttyMode()
+    {
+        this.NuttyMode = 0
     }
 
     checkKeyboardInput()
@@ -136,14 +161,26 @@ class Game extends Phaser.Scene
         if(this.cursors.up.isDown && this.dir == 1){
             this.incrementScore()
         }
+        else if(this.cursors.up.isDown && this.dir != 1){
+            this.decrementScore()
+        }
         else if(this.cursors.down.isDown && this.dir == 2){
             this.incrementScore()
+        }
+        else if(this.cursors.down.isDown && this.dir != 2){
+            this.decrementScore()
         }
         else if(this.cursors.left.isDown && this.dir == 3){
             this.incrementScore()
         }
+        else if(this.cursors.left.isDown && this.dir != 3){
+            this.decrementScore()
+        }
         else if(this.cursors.right.isDown && this.dir == 4){
             this.incrementScore()
+        }
+        else if(this.cursors.right.isDown && this.dir != 4){
+            this.decrementScore()
         }
     }
 
@@ -152,14 +189,26 @@ class Game extends Phaser.Scene
         if(this.cursors.up.isDown && this.dir == 2){
             this.incrementScore()
         }
+        else if(this.cursors.up.isDown && this.dir != 2){
+            this.decrementScore()
+        }
         else if(this.cursors.down.isDown && this.dir == 1){
             this.incrementScore()
+        }
+        else if(this.cursors.down.isDown && this.dir != 1){
+            this.decrementScore()
         }
         else if(this.cursors.left.isDown && this.dir == 4){
             this.incrementScore()
         }
+        else if(this.cursors.left.isDown && this.dir != 4){
+            this.decrementScore()
+        }
         else if(this.cursors.right.isDown && this.dir == 3){
             this.incrementScore()
+        }
+        else if(this.cursors.right.isDown && this.dir != 3){
+            this.decrementScore()
         }
     }
 

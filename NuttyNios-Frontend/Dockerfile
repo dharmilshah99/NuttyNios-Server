@@ -10,5 +10,7 @@ RUN npm install
 COPY . .
 
 EXPOSE 10000
+EXPOSE 2567
 
+RUN npm run start-server
 CMD [ "npm", "run", "start" ]
