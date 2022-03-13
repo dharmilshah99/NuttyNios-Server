@@ -1,0 +1,7 @@
+fastapi==0.75.0
+paho_mqtt==1.6.1
+uvicorn
+aiofiles
+requests
+asyncio
+websockets
