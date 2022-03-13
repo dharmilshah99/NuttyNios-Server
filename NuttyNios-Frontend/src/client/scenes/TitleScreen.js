@@ -5,7 +5,8 @@ export default class TitleScreen extends Phaser.Scene
 {
 	init()
 	{
-		this.client = new Colyseus.Client('ws://localhost:2567');
+		this.host = window.location.hostname
+		this.client = new Colyseus.Client('ws://' + this.host +':2567');
 	}
 
 	preload()

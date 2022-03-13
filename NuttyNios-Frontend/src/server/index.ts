@@ -22,4 +22,5 @@ gameServer.define('my_room', MyRoom);
 app.use("/colyseus", monitor());
 
 gameServer.listen(port);
-console.log('Listening on ws://localhost:'+port)
+var host = 'localhost';
+console.log('Listening on ws://' + host+':'+port)
