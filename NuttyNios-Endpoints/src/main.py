@@ -16,44 +16,6 @@ PORT = 1883
 Manager = ConnectionManager()
 
 ###
-# Debugging
-###
-
-html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-            var ws = new WebSocket("ws://localhost:18000/ws/node/admin/data/button");
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
-            };
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
-
-
-###
 # App
 ###
 
@@ -61,9 +23,6 @@ app = FastAPI(
     title="NuttyNios Data Server",
     description="Server that republishes data sent to the MQTT bridge"
 )
-
-# TODO: Remove after debug
-
 
 @app.get("/")
 async def get():

@@ -15,20 +15,27 @@ services:
     depends_on:
       - mosquitto
 
-  nuttynios-frontend:
+  nuttynios-frontend-client:
     build:
       context: ./NuttyNios-Frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.client
     ports:
       - 49160:10000
     depends_on:
       - mosquitto-bridge
+ 
+  nuttynios-frontend-server:
+    build:
+      context: ./NuttyNios-Frontend
+      dockerfile: Dockerfile.server
+    ports:
+      - 25670:25670
 
   nuttynios-endpoints:
     build:
       context: ./NuttyNios-Endpoints
       dockerfile: Dockerfile
     ports:
-      - 18000:18000
+      - 18000-18003:18000
     depends_on:
       - mosquitto-bridge

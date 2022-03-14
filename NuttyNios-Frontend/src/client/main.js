@@ -1,5 +1,7 @@
 import Phaser from 'phaser'
 
+import 'regenerator-runtime/runtime'
+
 import TitleScreen from './scenes/TitleScreen'
 
 import Game from './scenes/game'
