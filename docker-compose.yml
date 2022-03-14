@@ -29,7 +29,7 @@ services:
       context: ./NuttyNios-Frontend
       dockerfile: Dockerfile.server
     ports:
-      - 2567:2567
+      - 25670:25670
 
   nuttynios-endpoints:
     build:

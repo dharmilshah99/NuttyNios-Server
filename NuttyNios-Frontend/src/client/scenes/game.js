@@ -6,7 +6,8 @@ class Game extends Phaser.Scene
     refreshFrameTimer2 = Phaser.Time.TimerEvent;
     refreshFrameInterval = 1000;
     refreshFrameInterval2 = 10000;
-    init()
+    
+    init(data)
     {
         this.Score = 0
         this.NuttyMode = 0
@@ -75,6 +76,8 @@ class Game extends Phaser.Scene
     // by default phaser updates 60 frames / second
     update()
     {
+        this.MessageHandler()
+        console.log(this.directionInput)
         this.checkNuttyMode()
         
         if(this.NuttyMode == 0)
@@ -93,6 +96,15 @@ class Game extends Phaser.Scene
         }   
     }
     
+    // handles all incoming messages from websockets
+    MessageHandler()
+    {
+        this.directionInput = this.game["direction"].getMessage().direction
+        // TODO: uncomment the following once messages are published to both topics
+        // this.buttonsInput = this.game["buttons"].getMessage().buttons
+        // this.switchesInput = this.game["switches"].getMessage().switches
+    }
+
     // this function is called every refreshFrameInterval
     TimerEvent()
     {
@@ -146,6 +158,7 @@ class Game extends Phaser.Scene
 
     checkNuttyMode()
     {
+        // TODO: change to input from this.buttonsInput
         this.input.keyboard.once('keydown-SHIFT', () => {
 			this.NuttyMode = !this.NuttyMode
 		})
@@ -158,6 +171,7 @@ class Game extends Phaser.Scene
 
     checkKeyboardInput()
     {
+        // TODO: check input from this.directionInput instead
         if(this.cursors.up.isDown && this.dir == 1){
             this.incrementScore()
         }

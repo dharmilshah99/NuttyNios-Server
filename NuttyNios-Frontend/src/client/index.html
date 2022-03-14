@@ -8,3 +8,60 @@
         <script src="./main.js"></script>
     </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+    </head>
+    <body>
+        <h1>WebSocket Chat</h1>
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>Send</button>
+        </form>
+        <ul id='messages'>
+        </ul>
+        <script>
+            console.log("Connecting to websocket");
+            var ws = new WebSocket("ws://52.5.188.233:18000/ws/node/admin/data/button");
+            ws.onopen = _onOpen;
+            ws.onclose = _onClose;
+            ws.onerror = _onError;
+            ws.onmessage = _onMQTTMessage;
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages')
+                var message = document.createElement('li')
+                var content = document.createTextNode(event.data)
+                message.appendChild(content)
+                messages.appendChild(message)
+            };
+
+            function _onOpen() {
+                console.log("connected");
+            //$("#btnConnect").html("Connected");
+                // btnConnect.innerHTML = "Connected";
+            }
+            //An event listener to be called when a message is received from the server
+            function _onMQTTMessage() {
+                console.log("message received");
+            }
+            //An event listener to be called when an error occurs. This is a simple event named "error".
+            function _onError() {
+                console.log("onError");
+                // console.log(JSON.stringify(event.data));
+            }
+            //An event listener to be called when the WebSocket connection's readyState changes to CLOSED.
+            function _onClose() {
+                console.log("onClose");
+                // console.log(JSON.stringify(event.data));
+            }
+
+            function sendMessage(event) {
+                var input = document.getElementById("messageText")
+                input.value = ''
+                event.preventDefault()
+            }
+        </script>
+    </body>
+</html> -->
