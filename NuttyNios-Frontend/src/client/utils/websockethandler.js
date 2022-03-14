@@ -2,11 +2,11 @@ import autoBind from 'auto-bind';
 
 export default class WebSocketHandler
 {
-    constructor(num, topicName){
+    constructor(port, num, topicName){
         this.nodeNum = num
         this.topic = topicName
         this.IP = "52.5.188.233"
-		this.port = "18000"
+		this.port = port
 		var websocketURL = "ws://" + this.IP + ":" + this.port + "/ws/node/" + this.nodeNum + "/data/" + this.topic
 		this.ws = new WebSocket(websocketURL);
 		this.ws.onopen = this._onOpen;

@@ -99,7 +99,32 @@ class Game extends Phaser.Scene
     // handles all incoming messages from websockets
     MessageHandler()
     {
-        this.directionInput = this.game["direction"].getMessage().direction
+        // reset state of input
+        this.directionInput = {}
+        this.directionInput['up'] = false
+        this.directionInput['left'] = false
+        this.directionInput['right'] = false
+        this.directionInput['down'] = false
+
+        // update inputs
+        this.directionInputList = this.game["direction"].getMessage().direction
+
+        for(let i = 0; i < this.directionInputList.length; i++){
+            switch(this.directionInputList[i]) {
+                case "00":
+                  this.directionInput.up = true
+                  break;
+                case "01":
+                    this.directionInput.down = true
+                  break;
+                case "10":
+                    this.directionInput.left = true
+                break;
+                case "11":
+                    this.directionInput.right = true
+                break;
+              }
+        }
         // TODO: uncomment the following once messages are published to both topics
         // this.buttonsInput = this.game["buttons"].getMessage().buttons
         // this.switchesInput = this.game["switches"].getMessage().switches
@@ -172,56 +197,56 @@ class Game extends Phaser.Scene
     checkKeyboardInput()
     {
         // TODO: check input from this.directionInput instead
-        if(this.cursors.up.isDown && this.dir == 1){
+        if(this.directionInput.up && this.dir == 1){
             this.incrementScore()
         }
-        else if(this.cursors.up.isDown && this.dir != 1){
+        else if(this.directionInput.up && this.dir != 1){
             this.decrementScore()
         }
-        else if(this.cursors.down.isDown && this.dir == 2){
+        else if(this.directionInput.down && this.dir == 2){
             this.incrementScore()
         }
-        else if(this.cursors.down.isDown && this.dir != 2){
+        else if(this.directionInput.down && this.dir != 2){
             this.decrementScore()
         }
-        else if(this.cursors.left.isDown && this.dir == 3){
+        else if(this.directionInput.left && this.dir == 3){
             this.incrementScore()
         }
-        else if(this.cursors.left.isDown && this.dir != 3){
+        else if(this.directionInput.left && this.dir != 3){
             this.decrementScore()
         }
-        else if(this.cursors.right.isDown && this.dir == 4){
+        else if(this.directionInput.right && this.dir == 4){
             this.incrementScore()
         }
-        else if(this.cursors.right.isDown && this.dir != 4){
+        else if(this.directionInput.right && this.dir != 4){
             this.decrementScore()
         }
     }
 
     checkNuttyKeyboardInput()
     {
-        if(this.cursors.up.isDown && this.dir == 2){
+        if(this.directionInput.up && this.dir == 2){
             this.incrementScore()
         }
-        else if(this.cursors.up.isDown && this.dir != 2){
+        else if(this.directionInput.up && this.dir != 2){
             this.decrementScore()
         }
-        else if(this.cursors.down.isDown && this.dir == 1){
+        else if(this.directionInput.down && this.dir == 1){
             this.incrementScore()
         }
-        else if(this.cursors.down.isDown && this.dir != 1){
+        else if(this.directionInput.down && this.dir != 1){
             this.decrementScore()
         }
-        else if(this.cursors.left.isDown && this.dir == 4){
+        else if(this.directionInput.left && this.dir == 4){
             this.incrementScore()
         }
-        else if(this.cursors.left.isDown && this.dir != 4){
+        else if(this.directionInput.left && this.dir != 4){
             this.decrementScore()
         }
-        else if(this.cursors.right.isDown && this.dir == 3){
+        else if(this.directionInput.right && this.dir == 3){
             this.incrementScore()
         }
-        else if(this.cursors.right.isDown && this.dir != 3){
+        else if(this.directionInput.right && this.dir != 3){
             this.decrementScore()
         }
     }
