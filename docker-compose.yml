@@ -34,11 +34,20 @@ services:
   nuttynios-endpoints:
     build:
       context: ./NuttyNios-Endpoints
-      dockerfile: Dockerfile
-    ports:
-      - 18000:18000
+      dockerfile: Dockerfile.endpoints
+    expose:
+      - 18000-18003
     depends_on:
       - mosquitto-bridge
+
+  nuttynios-endpoints-loadbalancer:
+    build:
+      context: ./NuttyNios-Endpoints
+      dockerfile: Dockerfile.loadbalancer
+    ports:
+      - 19000:19000
+    depends_on:
+      - nuttynios-endpoints
 
   nuttynios-mongodb:
     image: mongo:latest
