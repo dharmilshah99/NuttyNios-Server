@@ -4,7 +4,7 @@ class Game extends Phaser.Scene
 {
     refreshFrameTimer = Phaser.Time.TimerEvent;
     refreshFrameTimer2 = Phaser.Time.TimerEvent;
-    refreshFrameInterval = 1000;
+    refreshFrameInterval = 4000;
     refreshFrameInterval2 = 10000;
     
     init(data)
@@ -76,8 +76,27 @@ class Game extends Phaser.Scene
     // by default phaser updates 60 frames / second
     update()
     {
-        this.MessageHandler()
-        console.log(this.directionInput)
+        /* Use for deployment on server, read from nios */
+        // this.MessageHandler()
+        // console.log(this.directionInput)
+        // this.checkNuttyMode()
+        
+        // if(this.NuttyMode == 0)
+        // {   
+        //     this.NuttyModeLabel.setPosition(-10000, -10000)
+        //     if(this.Score == this.Currentscore){
+        //         this.checkMQTTKeyboardInput()         
+        //     }
+        // }
+        // else if(this.NuttyMode == 1)
+        // {   
+        //     this.NuttyModeLabel.setPosition(400, 450)
+        //     if(this.Score == this.Currentscore){
+        //         this.checkMQTTNuttyKeyboardInput()     
+        //     }
+        // }   
+
+        /* Use for local testing, keyboard inputs */
         this.checkNuttyMode()
         
         if(this.NuttyMode == 0)
@@ -107,23 +126,24 @@ class Game extends Phaser.Scene
         this.directionInput['down'] = false
 
         // update inputs
-        this.directionInputList = this.game["direction"].getMessage().direction
-
-        for(let i = 0; i < this.directionInputList.length; i++){
-            switch(this.directionInputList[i]) {
-                case "00":
-                  this.directionInput.up = true
-                  break;
-                case "01":
-                    this.directionInput.down = true
-                  break;
-                case "10":
-                    this.directionInput.left = true
-                break;
-                case "11":
-                    this.directionInput.right = true
-                break;
-              }
+        this.directionInputList = this.game["direction"].getMessage().directions_moved
+        if(this.directionInputList !== undefined){
+            for(let i = 0; i < this.directionInputList.length; i++){
+                switch(this.directionInputList[i]) {
+                    case 0:
+                      this.directionInput.up = true
+                      break;
+                    case 1:
+                        this.directionInput.down = true
+                      break;
+                    case 2:
+                        this.directionInput.left = true
+                    break;
+                    case 3:
+                        this.directionInput.right = true
+                    break;
+                  }
+            }
         }
         // TODO: uncomment the following once messages are published to both topics
         // this.buttonsInput = this.game["buttons"].getMessage().buttons
@@ -194,63 +214,93 @@ class Game extends Phaser.Scene
         this.NuttyMode = 0
     }
 
-    checkKeyboardInput()
+    checkMQTTKeyboardInput()
     {
         // TODO: check input from this.directionInput instead
         if(this.directionInput.up && this.dir == 1){
             this.incrementScore()
         }
-        else if(this.directionInput.up && this.dir != 1){
-            this.decrementScore()
-        }
-        else if(this.directionInput.down && this.dir == 2){
+        // else if(this.directionInput.up && this.dir != 1){
+        //     this.decrementScore()
+        // }
+        if(this.directionInput.down && this.dir == 2){
             this.incrementScore()
         }
-        else if(this.directionInput.down && this.dir != 2){
-            this.decrementScore()
-        }
-        else if(this.directionInput.left && this.dir == 3){
+        // else if(this.directionInput.down && this.dir != 2){
+        //     this.decrementScore()
+        // }
+        if(this.directionInput.left && this.dir == 3){
             this.incrementScore()
         }
-        else if(this.directionInput.left && this.dir != 3){
-            this.decrementScore()
-        }
-        else if(this.directionInput.right && this.dir == 4){
+        // else if(this.directionInput.left && this.dir != 3){
+        //     this.decrementScore()
+        // }
+        if(this.directionInput.right && this.dir == 4){
             this.incrementScore()
         }
-        else if(this.directionInput.right && this.dir != 4){
-            this.decrementScore()
+        // else if(this.directionInput.right && this.dir != 4){
+        //     this.decrementScore()
+        // }
+    }
+
+    checkMQTTNuttyKeyboardInput()
+    {
+        if(this.directionInput.up && this.dir == 2){
+            this.incrementScore()
+        }
+        // else if(this.directionInput.up && this.dir != 2){
+        //     this.decrementScore()
+        // }
+        if(this.directionInput.down && this.dir == 1){
+            this.incrementScore()
+        }
+        // else if(this.directionInput.down && this.dir != 1){
+        //     this.decrementScore()
+        // }
+        if(this.directionInput.left && this.dir == 4){
+            this.incrementScore()
+        }
+        // else if(this.directionInput.left && this.dir != 4){
+        //     this.decrementScore()
+        // }
+        if(this.directionInput.right && this.dir == 3){
+            this.incrementScore()
+        }
+        // else if(this.directionInput.right && this.dir != 3){
+        //     this.decrementScore()
+        // }
+    }
+
+    checkKeyboardInput()
+    {
+        if(this.cursors.up.isDown && this.dir == 1){
+            this.incrementScore()
+        }
+        else if(this.cursors.down.isDown && this.dir == 2){
+            this.incrementScore()
+        }
+        else if(this.cursors.left.isDown && this.dir == 3){
+            this.incrementScore()
+        }
+        else if(this.cursors.right.isDown && this.dir == 4){
+            this.incrementScore()
         }
     }
 
     checkNuttyKeyboardInput()
     {
-        if(this.directionInput.up && this.dir == 2){
+        if(this.cursors.up.isDown && this.dir == 2){
             this.incrementScore()
         }
-        else if(this.directionInput.up && this.dir != 2){
-            this.decrementScore()
-        }
-        else if(this.directionInput.down && this.dir == 1){
+        else if(this.cursors.down.isDown && this.dir == 1){
             this.incrementScore()
         }
-        else if(this.directionInput.down && this.dir != 1){
-            this.decrementScore()
-        }
-        else if(this.directionInput.left && this.dir == 4){
+        else if(this.cursors.left.isDown && this.dir == 4){
             this.incrementScore()
         }
-        else if(this.directionInput.left && this.dir != 4){
-            this.decrementScore()
-        }
-        else if(this.directionInput.right && this.dir == 3){
+        else if(this.cursors.right.isDown && this.dir == 3){
             this.incrementScore()
-        }
-        else if(this.directionInput.right && this.dir != 3){
-            this.decrementScore()
-        }
     }
-
 }
 
 export default Game
