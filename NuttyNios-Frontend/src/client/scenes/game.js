@@ -76,8 +76,27 @@ class Game extends Phaser.Scene
     // by default phaser updates 60 frames / second
     update()
     {
-        this.MessageHandler()
-        console.log(this.directionInput)
+        /* Use for deployment on server, read from nios */
+        // this.MessageHandler()
+        // console.log(this.directionInput)
+        // this.checkNuttyMode()
+        
+        // if(this.NuttyMode == 0)
+        // {   
+        //     this.NuttyModeLabel.setPosition(-10000, -10000)
+        //     if(this.Score == this.Currentscore){
+        //         this.checkMQTTKeyboardInput()         
+        //     }
+        // }
+        // else if(this.NuttyMode == 1)
+        // {   
+        //     this.NuttyModeLabel.setPosition(400, 450)
+        //     if(this.Score == this.Currentscore){
+        //         this.checkMQTTNuttyKeyboardInput()     
+        //     }
+        // }   
+
+        /* Use for local testing, keyboard inputs */
         this.checkNuttyMode()
         
         if(this.NuttyMode == 0)
@@ -195,7 +214,7 @@ class Game extends Phaser.Scene
         this.NuttyMode = 0
     }
 
-    checkKeyboardInput()
+    checkMQTTKeyboardInput()
     {
         // TODO: check input from this.directionInput instead
         if(this.directionInput.up && this.dir == 1){
@@ -224,7 +243,7 @@ class Game extends Phaser.Scene
         // }
     }
 
-    checkNuttyKeyboardInput()
+    checkMQTTNuttyKeyboardInput()
     {
         if(this.directionInput.up && this.dir == 2){
             this.incrementScore()
@@ -250,6 +269,38 @@ class Game extends Phaser.Scene
         // else if(this.directionInput.right && this.dir != 3){
         //     this.decrementScore()
         // }
+    }
+
+    checkKeyboardInput()
+    {
+        if(this.cursors.up.isDown && this.dir == 1){
+            this.incrementScore()
+        }
+        else if(this.cursors.down.isDown && this.dir == 2){
+            this.incrementScore()
+        }
+        else if(this.cursors.left.isDown && this.dir == 3){
+            this.incrementScore()
+        }
+        else if(this.cursors.right.isDown && this.dir == 4){
+            this.incrementScore()
+        }
+    }
+
+    checkNuttyKeyboardInput()
+    {
+        if(this.cursors.up.isDown && this.dir == 2){
+            this.incrementScore()
+        }
+        else if(this.cursors.down.isDown && this.dir == 1){
+            this.incrementScore()
+        }
+        else if(this.cursors.left.isDown && this.dir == 4){
+            this.incrementScore()
+        }
+        else if(this.cursors.right.isDown && this.dir == 3){
+            this.incrementScore()
+        }
     }
 
 }
