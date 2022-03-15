@@ -35,15 +35,33 @@ class Game extends Phaser.Scene
             loop: true
         })
 
-        this.arrowUp = this.add.polygon(400, 150, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
+        this.hehe = this.add.rectangle(400,250, 300, 300, 0xff1dce, 1)
+        this.hehe.setAngle(45)
+
+        this.hehe1 = this.add.rectangle(400,250, 250, 250, 0x4287f5, 1)
+        this.hehe1.setAngle(45)
+
+        this.arrowUpOutline = this.add.polygon(400, 150, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
+        this.arrowUpOutline.setAngle(90)
+
+        this.arrowUp = this.add.polygon(400, 145, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
         this.arrowUp.setAngle(90)
 
-        this.arrowDown = this.add.polygon(400, 350, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
+        this.arrowDownOutline = this.add.polygon(400, 350, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
+        this.arrowDownOutline.setAngle(270)
+
+        this.arrowDown = this.add.polygon(400, 355, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
         this.arrowDown.setAngle(270)
 
-        this.arrowLeft = this.add.polygon(300, 250, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
+        this.arrowLeftOutline = this.add.polygon(300, 250, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
 
-        this.arrowRight = this.add.polygon(500, 250, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
+        this.arrowLeft = this.add.polygon(295, 250, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
+
+
+        this.arrowRightOutline = this.add.polygon(500, 250, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
+        this.arrowRightOutline.setAngle(180)
+
+        this.arrowRight = this.add.polygon(505, 250, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
         this.arrowRight.setAngle(180)
 
         this.gameName = this.add.circle(400, 250, 35, 0xffffff, 1)
@@ -55,6 +73,8 @@ class Game extends Phaser.Scene
         const titleStyle = {
             fontSize: 20
         }
+
+        this.scoreboard1 = this.add.circle(750, 400, 35, 0xff1dce, 1)
 
         this.ScoreLabel = this.add.text(750, 400, '0', scoreStyle)
             .setOrigin(0.5, 0.5)
@@ -76,7 +96,7 @@ class Game extends Phaser.Scene
     // by default phaser updates 60 frames / second
     update()
     {
-        this.MessageHandler()
+        // this.MessageHandler()
         console.log(this.directionInput)
         this.checkNuttyMode()
         
