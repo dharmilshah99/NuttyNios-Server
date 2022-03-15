@@ -60,7 +60,6 @@ services:
 
   nuttynios-mongoexpress:
     image: mongo-express:latest
-    restart: always
     ports:
       - 18081:8081
     environment:
