@@ -46,7 +46,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - /nuttynios-mongodb:/data/db
+      - ./NuttyNios-MongoDB:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=<mongo_usr>
       - MONGO_INITDB_ROOT_PASSWORD=<mongo_pwd>
@@ -60,7 +60,7 @@ services:
       - ME_CONFIG_MONGODB_SERVER=nuttynios-mongodb
       - ME_CONFIG_MONGODB_ADMINUSERNAME=<mongo_usr>
       - ME_CONFIG_MONGODB_ADMINPASSWORD=<mongo_pwd>
-      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
       - ME_CONFIG_BASICAUTH_USERNAME=<mongo_express_usr>
       - ME_CONFIG_BASICAUTH_PASSWORD=<mongo_express_pwd>
     depends_on:
