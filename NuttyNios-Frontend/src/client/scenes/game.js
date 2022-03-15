@@ -300,9 +300,7 @@ class Game extends Phaser.Scene
         }
         else if(this.cursors.right.isDown && this.dir == 3){
             this.incrementScore()
-        }
     }
-
 }
 
 export default Game
