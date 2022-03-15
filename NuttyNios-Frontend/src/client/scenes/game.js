@@ -1,24 +1,21 @@
 import Phaser from 'phaser'
 
-class Game extends Phaser.Scene
-{
+class Game extends Phaser.Scene {
     refreshFrameTimer = Phaser.Time.TimerEvent;
     refreshFrameTimer2 = Phaser.Time.TimerEvent;
-    refreshFrameInterval = 1000;
+    refreshFrameInterval = 4000;
     refreshFrameInterval2 = 10000;
-    init()
-    {
+
+    init(data) {
         this.Score = 0
         this.NuttyMode = 0
     }
 
-    preload()
-    {
-         
+    preload() {
+
     }
 
-    create()
-    {
+    create() {
         // create timer
         this.refreshFrameTimer = this.time.addEvent({
             callback: this.TimerEvent,
@@ -46,7 +43,7 @@ class Game extends Phaser.Scene
         this.arrowRight.setAngle(180)
 
         this.gameName = this.add.circle(400, 250, 35, 0xffffff, 1)
-        
+
         const scoreStyle = {
             fontSize: 48
         }
@@ -73,145 +70,218 @@ class Game extends Phaser.Scene
     }
 
     // by default phaser updates 60 frames / second
-    update()
-    {
+    update() {
+        /* Use for deployment on server, read from nios */
+        // this.MessageHandler()
+        // console.log(this.directionInput)
+        // this.checkNuttyMode()
+
+        // if(this.NuttyMode == 0)
+        // {   
+        //     this.NuttyModeLabel.setPosition(-10000, -10000)
+        //     if(this.Score == this.Currentscore){
+        //         this.checkMQTTKeyboardInput()         
+        //     }
+        // }
+        // else if(this.NuttyMode == 1)
+        // {   
+        //     this.NuttyModeLabel.setPosition(400, 450)
+        //     if(this.Score == this.Currentscore){
+        //         this.checkMQTTNuttyKeyboardInput()     
+        //     }
+        // }   
+
+        /* Use for local testing, keyboard inputs */
         this.checkNuttyMode()
-        
-        if(this.NuttyMode == 0)
-        {   
+
+        if (this.NuttyMode == 0) {
             this.NuttyModeLabel.setPosition(-10000, -10000)
-            if(this.Score == this.Currentscore){
-                this.checkKeyboardInput()         
+            if (this.Score == this.Currentscore) {
+                this.checkKeyboardInput()
             }
         }
-        else if(this.NuttyMode == 1)
-        {   
+        else if (this.NuttyMode == 1) {
             this.NuttyModeLabel.setPosition(400, 450)
-            if(this.Score == this.Currentscore){
-                this.checkNuttyKeyboardInput()     
+            if (this.Score == this.Currentscore) {
+                this.checkNuttyKeyboardInput()
             }
-        }   
+        }
     }
-    
+
+    // handles all incoming messages from websockets
+    MessageHandler() {
+        // reset state of input
+        this.directionInput = {}
+        this.directionInput['up'] = false
+        this.directionInput['left'] = false
+        this.directionInput['right'] = false
+        this.directionInput['down'] = false
+
+        // update inputs
+        this.directionInputList = this.game["direction"].getMessage().directions_moved
+        if (this.directionInputList !== undefined) {
+            for (let i = 0; i < this.directionInputList.length; i++) {
+                switch (this.directionInputList[i]) {
+                    case 0:
+                        this.directionInput.up = true
+                        break;
+                    case 1:
+                        this.directionInput.down = true
+                        break;
+                    case 2:
+                        this.directionInput.left = true
+                        break;
+                    case 3:
+                        this.directionInput.right = true
+                        break;
+                }
+            }
+        }
+        // TODO: uncomment the following once messages are published to both topics
+        // this.buttonsInput = this.game["buttons"].getMessage().buttons
+        // this.switchesInput = this.game["switches"].getMessage().switches
+    }
+
     // this function is called every refreshFrameInterval
-    TimerEvent()
-    {
+    TimerEvent() {
         // gets a new frame
         this.Currentscore = this.Score
-        this.dir = Phaser.Math.Between(1,4)
+        this.dir = Phaser.Math.Between(1, 4)
         this.revertarrowColor()
         this.setArrowColor()
     }
 
-    TimerEvent2()
-    {
+    TimerEvent2() {
         this.revertNuttyMode()
     }
 
-    setArrowColor()
-    {
-        if(this.dir==1){
+    setArrowColor() {
+        if (this.dir == 1) {
             this.arrowUp.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
-        else if(this.dir==2){
+        else if (this.dir == 2) {
             this.arrowDown.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
-        else if(this.dir==3){
+        else if (this.dir == 3) {
             this.arrowLeft.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
-        else if(this.dir==4){
+        else if (this.dir == 4) {
             this.arrowRight.fillColor = 0xff0000 + Phaser.Math.Between(1000, 50000)
         }
     }
 
-    incrementScore()
-    {
+    incrementScore() {
         this.Score += 1
         this.ScoreLabel.text = this.Score
     }
 
-    decrementScore()
-    {
+    decrementScore() {
         this.Score -= 1
         this.ScoreLabel.text = this.Score
     }
 
-    revertarrowColor()
-    {
+    revertarrowColor() {
         this.arrowUp.fillColor = 0xffffff
         this.arrowDown.fillColor = 0xffffff
         this.arrowLeft.fillColor = 0xffffff
         this.arrowRight.fillColor = 0xffffff
     }
 
-    checkNuttyMode()
-    {
+    checkNuttyMode() {
+        // TODO: change to input from this.buttonsInput
         this.input.keyboard.once('keydown-SHIFT', () => {
-			this.NuttyMode = !this.NuttyMode
-		})
+            this.NuttyMode = !this.NuttyMode
+        })
     }
 
-    revertNuttyMode()
-    {
+    revertNuttyMode() {
         this.NuttyMode = 0
     }
 
-    checkKeyboardInput()
-    {
-        if(this.cursors.up.isDown && this.dir == 1){
+    checkMQTTKeyboardInput() {
+        // TODO: check input from this.directionInput instead
+        if (this.directionInput.up && this.dir == 1) {
             this.incrementScore()
         }
-        else if(this.cursors.up.isDown && this.dir != 1){
-            this.decrementScore()
-        }
-        else if(this.cursors.down.isDown && this.dir == 2){
+        // else if(this.directionInput.up && this.dir != 1){
+        //     this.decrementScore()
+        // }
+        if (this.directionInput.down && this.dir == 2) {
             this.incrementScore()
         }
-        else if(this.cursors.down.isDown && this.dir != 2){
-            this.decrementScore()
-        }
-        else if(this.cursors.left.isDown && this.dir == 3){
+        // else if(this.directionInput.down && this.dir != 2){
+        //     this.decrementScore()
+        // }
+        if (this.directionInput.left && this.dir == 3) {
             this.incrementScore()
         }
-        else if(this.cursors.left.isDown && this.dir != 3){
-            this.decrementScore()
-        }
-        else if(this.cursors.right.isDown && this.dir == 4){
+        // else if(this.directionInput.left && this.dir != 3){
+        //     this.decrementScore()
+        // }
+        if (this.directionInput.right && this.dir == 4) {
             this.incrementScore()
         }
-        else if(this.cursors.right.isDown && this.dir != 4){
-            this.decrementScore()
+        // else if(this.directionInput.right && this.dir != 4){
+        //     this.decrementScore()
+        // }
+    }
+
+    checkMQTTNuttyKeyboardInput() {
+        if (this.directionInput.up && this.dir == 2) {
+            this.incrementScore()
+        }
+        // else if(this.directionInput.up && this.dir != 2){
+        //     this.decrementScore()
+        // }
+        if (this.directionInput.down && this.dir == 1) {
+            this.incrementScore()
+        }
+        // else if(this.directionInput.down && this.dir != 1){
+        //     this.decrementScore()
+        // }
+        if (this.directionInput.left && this.dir == 4) {
+            this.incrementScore()
+        }
+        // else if(this.directionInput.left && this.dir != 4){
+        //     this.decrementScore()
+        // }
+        if (this.directionInput.right && this.dir == 3) {
+            this.incrementScore()
+        }
+        // else if(this.directionInput.right && this.dir != 3){
+        //     this.decrementScore()
+        // }
+    }
+
+    checkKeyboardInput() {
+        if (this.cursors.up.isDown && this.dir == 1) {
+            this.incrementScore()
+        }
+        else if (this.cursors.down.isDown && this.dir == 2) {
+            this.incrementScore()
+        }
+        else if (this.cursors.left.isDown && this.dir == 3) {
+            this.incrementScore()
+        }
+        else if (this.cursors.right.isDown && this.dir == 4) {
+            this.incrementScore()
         }
     }
 
-    checkNuttyKeyboardInput()
-    {
-        if(this.cursors.up.isDown && this.dir == 2){
+    checkNuttyKeyboardInput() {
+        if (this.cursors.up.isDown && this.dir == 2) {
             this.incrementScore()
         }
-        else if(this.cursors.up.isDown && this.dir != 2){
-            this.decrementScore()
-        }
-        else if(this.cursors.down.isDown && this.dir == 1){
+        else if (this.cursors.down.isDown && this.dir == 1) {
             this.incrementScore()
         }
-        else if(this.cursors.down.isDown && this.dir != 1){
-            this.decrementScore()
-        }
-        else if(this.cursors.left.isDown && this.dir == 4){
+        else if (this.cursors.left.isDown && this.dir == 4) {
             this.incrementScore()
         }
-        else if(this.cursors.left.isDown && this.dir != 4){
-            this.decrementScore()
-        }
-        else if(this.cursors.right.isDown && this.dir == 3){
+        else if (this.cursors.right.isDown && this.dir == 3) {
             this.incrementScore()
-        }
-        else if(this.cursors.right.isDown && this.dir != 3){
-            this.decrementScore()
         }
     }
-
 }
 
 export default Game
