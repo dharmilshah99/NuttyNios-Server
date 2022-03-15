@@ -56,32 +56,32 @@ export default class TitleScreen extends Phaser.Scene
 			console.log("1 is pressed")
 			this.nodeNum = "0"
 			this.game["direction"] = new WebSocketHandler("18000", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18000", this.nodeNum, "buttons")
-			this.game["switches"] = new WebSocketHandler("18000", this.nodeNum, "switches")
+			this.game["buttons"] = new WebSocketHandler("18000", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("18000", this.nodeNum, "switch")
 		})
 
 		this.input.keyboard.once('keydown-TWO', () => {
 			console.log("2 is pressed")
 			this.nodeNum = "1"
 			this.game["direction"] = new WebSocketHandler("18001", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18001", this.nodeNum, "buttons")
-			this.game["switches"] = new WebSocketHandler("18001", this.nodeNum, "switches")
+			this.game["buttons"] = new WebSocketHandler("18001", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("18001", this.nodeNum, "switch")
 		})
 
 		this.input.keyboard.once('keydown-THREE', () => {
 			console.log("3 is pressed")
 			this.nodeNum = "2"
 			this.game["direction"] = new WebSocketHandler("18002", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18002", this.nodeNum, "buttons")
-			this.game["switches"] = new WebSocketHandler("18002", this.nodeNum, "switches")
+			this.game["buttons"] = new WebSocketHandler("18002", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("18002", this.nodeNum, "switch")
 		})
 
 		this.input.keyboard.once('keydown-FOUR', () => {
 			console.log("4 is pressed")
 			this.nodeNum = "3"
 			this.game["direction"] = new WebSocketHandler("18003", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18003", this.nodeNum, "buttons")
-			this.game["switches"] = new WebSocketHandler("18003", this.nodeNum, "switches")
+			this.game["buttons"] = new WebSocketHandler("18003", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("18003", this.nodeNum, "switch")
 		})
 		
 		this.input.keyboard.once('keydown-SPACE', () => {
