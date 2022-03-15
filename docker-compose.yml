@@ -43,8 +43,6 @@ services:
   nuttynios-mongodb:
     image: mongo:latest
     restart: always
-    ports:
-      - 27017:27017
     volumes:
       - ./NuttyNios-MongoDB:/data/db
     environment:
