@@ -1,10 +1,17 @@
 import Phaser from 'phaser'
+import WebFontFile from '../utils/WebFontFile';
+import frog from '../characters/Frog.png'
+import mummy from '../characters/Mummy.png'
+import ogre from '../characters/Ogre.png'
+import wizard from '../characters/wizard.png'
+import nut from '../characters/Nut.png'
+import hourglass from '../characters/Hourglass.png'
 
 class Game extends Phaser.Scene
 {
     refreshFrameTimer = Phaser.Time.TimerEvent;
     refreshFrameTimer2 = Phaser.Time.TimerEvent;
-    refreshFrameInterval = 4000;
+    refreshFrameInterval = 1000;
     refreshFrameInterval2 = 10000;
     
     init(data)
@@ -15,7 +22,12 @@ class Game extends Phaser.Scene
 
     preload()
     {
-         
+        this.load.image('frog', frog)
+		this.load.image('mummy', mummy)
+		this.load.image('ogre', ogre)
+		this.load.image('wizard',wizard)
+        this.load.image('nut',nut)
+        this.load.image('hourglass',hourglass)
     }
 
     create()
@@ -35,60 +47,177 @@ class Game extends Phaser.Scene
             loop: true
         })
 
-        this.hehe = this.add.rectangle(400,250, 300, 300, 0xff1dce, 1)
-        this.hehe.setAngle(45)
+        this.backgroundElement = this.add.rectangle(400,250, 1000, 1000, 0xfff86e, 1)
+        this.backgroundElement.setAngle(45)
 
-        this.hehe1 = this.add.rectangle(400,250, 250, 250, 0x4287f5, 1)
-        this.hehe1.setAngle(45)
+        this.backgroundElement1 = this.add.rectangle(400,250, 850, 850, 0xff1dce, 1)
+        this.backgroundElement1.setAngle(45)
+
+        this.backgroundElement2 = this.add.rectangle(400,250, 700, 700, 0x0380fc, 1)
+        this.backgroundElement2.setAngle(45)
+
+        this.backgroundElement3 = this.add.rectangle(400,250, 550, 550, 0xfff86e, 1)
+        this.backgroundElement3.setAngle(45)
+
+        this.backgroundElement4 = this.add.rectangle(400,250, 400, 400, 0xff1dce, 1)
+        this.backgroundElement4.setAngle(45)
+
+        this.backgroundElement5 = this.add.rectangle(400,250, 250, 250, 0x0380fc, 1)
+        this.backgroundElement5.setAngle(45)
 
         this.arrowUpOutline = this.add.polygon(400, 150, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
         this.arrowUpOutline.setAngle(90)
 
-        this.arrowUp = this.add.polygon(400, 145, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
+        this.arrowUp = this.add.polygon(400, 145, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0x4d4a4a, 1)
         this.arrowUp.setAngle(90)
 
         this.arrowDownOutline = this.add.polygon(400, 350, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
         this.arrowDownOutline.setAngle(270)
 
-        this.arrowDown = this.add.polygon(400, 355, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
+        this.arrowDown = this.add.polygon(400, 355, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0x4d4a4a, 1)
         this.arrowDown.setAngle(270)
 
         this.arrowLeftOutline = this.add.polygon(300, 250, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
 
-        this.arrowLeft = this.add.polygon(295, 250, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
+        this.arrowLeft = this.add.polygon(295, 250, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0x4d4a4a, 1)
 
 
         this.arrowRightOutline = this.add.polygon(500, 250, '40 0 40 20 100 20 100 80 40 80 40 100 0 50', 0xffffff, 1)
         this.arrowRightOutline.setAngle(180)
 
-        this.arrowRight = this.add.polygon(505, 250, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0xb0b0b0, 1)
+        this.arrowRight = this.add.polygon(505, 250, '32 0 32 16 80 16 80 64 32 64 32 80 0 40', 0x4d4a4a, 1)
         this.arrowRight.setAngle(180)
 
-        this.gameName = this.add.circle(400, 250, 35, 0xffffff, 1)
+        this.indicator = this.add.circle(400, 250, 35, 0xffffff, 1)
         
         const scoreStyle = {
-            fontSize: 48
+            fontSize: 30,
+            fontFamily: ' "Press Start 2P" ',
+        }
+
+        const nuttyStyle = {
+            fontSize: 30,
+            fontFamily: ' "Press Start 2P" ',
+            color: "#000000"
         }
 
         const titleStyle = {
-            fontSize: 20
+            fontSize: 60,
+            fontFamily: ' "Press Start 2P" ',
+            color: '#ffffff'
         }
 
-        this.scoreboard1 = this.add.circle(750, 400, 35, 0xff1dce, 1)
+        const playerlabelStyle = {
+            fontSize: 16,
+            fontFamily: ' "Press Start 2P" '
+        }
 
-        this.ScoreLabel = this.add.text(750, 400, '0', scoreStyle)
+        this.player1labelframe = this.add.rectangle(685,400,185,75,0xffffff,1)
+            .setOrigin(0.5,0.5)
+        this.player1label = this.add.rectangle(685,400,162,55,0x000000,1)
+            .setOrigin(0.5,0.5)
+        this.player1 = this.add.text(656,392,'Player', playerlabelStyle)
+            .setOrigin(0.5,0.5)
+        this.player1Num = this.add.text(656,412,'1', playerlabelStyle)
+            .setOrigin(0.5,0.5)
+
+        this.scoreboardframe1 = this.add.circle(750,400, 45, 0xffffff, 1)
+            .setOrigin(0.5, 0.5)
+        this.scoreboard1 = this.add.circle(750, 400, 35, 0x000000, 1)
+            .setOrigin(0.5, 0.5)
+        this.ScoreLabel1 = this.add.text(753, 403, '0', scoreStyle)
             .setOrigin(0.5, 0.5)
 
-        this.TitleLabel1 = this.add.text(400, 240, 'Tilt', titleStyle)
-            .setOrigin(0.5, 0.5)
-            .setColor(0xff0000)
+        this.player2labelframe = this.add.rectangle(685,100,185,75,0xffffff,1)
+            .setOrigin(0.5,0.5)
+        this.player2label = this.add.rectangle(685,100,162,55,0x000000,1)
+            .setOrigin(0.5,0.5)
+        this.player2 = this.add.text(656,88,'Player', playerlabelStyle)
+            .setOrigin(0.5,0.5)
+        this.player2Num = this.add.text(656,108,'2', playerlabelStyle)
+            .setOrigin(0.5,0.5)
 
-        this.TitleLabel2 = this.add.text(400, 260, 'Tilt', titleStyle)
+        this.scoreboardframe2 = this.add.circle(750,100, 45, 0xffffff, 1)
             .setOrigin(0.5, 0.5)
-            .setColor(0xff0000)
+        this.scoreboard2 = this.add.circle(750, 100, 35, 0x000000, 1)
+            .setOrigin(0.5, 0.5)
+        this.ScoreLabel2 = this.add.text(753, 103, '0', scoreStyle)
+            .setOrigin(0.5, 0.5)
 
-        this.NuttyModeLabel = this.add.text(400, 450, 'NUTTY MODE ON!', scoreStyle)
+        this.player3labelframe = this.add.rectangle(115,100,185,75,0xffffff,1)
+            .setOrigin(0.5,0.5)
+        this.player3label = this.add.rectangle(115,100,162,55,0x000000,1)
+            .setOrigin(0.5,0.5)
+        this.player3 = this.add.text(144,88,'Player', playerlabelStyle)
+            .setOrigin(0.5,0.5)
+        this.player3Num = this.add.text(144,108,'3', playerlabelStyle)
+            .setOrigin(0.5,0.5)
+
+        this.scoreboardframe3 = this.add.circle(50,100, 45, 0xffffff, 1)
             .setOrigin(0.5, 0.5)
+        this.scoreboard3 = this.add.circle(50, 100, 35, 0x000000, 1)
+            .setOrigin(0.5, 0.5)
+        this.ScoreLabel3 = this.add.text(47, 103, '0', scoreStyle)
+            .setOrigin(0.5, 0.5)
+
+        this.player4labelframe = this.add.rectangle(115,400,185,75,0xffffff,1)
+            .setOrigin(0.5,0.5)
+        this.player4label = this.add.rectangle(115,400,162,55,0x000000,1)
+            .setOrigin(0.5,0.5)
+        this.player4 = this.add.text(144,392,'Player', playerlabelStyle)
+            .setOrigin(0.5,0.5)
+        this.player4Num = this.add.text(144,412,'4', playerlabelStyle)
+            .setOrigin(0.5,0.5)
+
+        this.scoreboardframe4 = this.add.circle(50,400, 45, 0xffffff, 1)
+            .setOrigin(0.5, 0.5)
+        this.scoreboard4 = this.add.circle(50, 400, 35, 0x000000, 1)
+            .setOrigin(0.5, 0.5)
+        this.ScoreLabel4 = this.add.text(47, 403, '0', scoreStyle)
+            .setOrigin(0.5, 0.5)
+
+        this.TitleLabel1 = this.add.text(520, 365, 'TILT', titleStyle)
+            .setOrigin(0.5, 0.5)
+            .setAngle(-45)
+        this.TitleLabel2 = this.add.text(280, 365, 'TILT', titleStyle)
+            .setOrigin(0.5, 0.5)
+            .setAngle(45)
+
+        const frog = this.add.image(755,330,'frog')
+			.setOrigin(0.5,0.5)
+			.setScale(1.05)
+            .setAngle(-5)
+
+		const mummy = this.add.image(755,33,'mummy')
+			.setOrigin(0.5,0.5)
+			.setScale(0.88)
+
+		const ogre = this.add.image(55,31,'ogre')
+			.setOrigin(0.5,0.5)
+			.setScale(0.50)
+
+		const wizard = this.add.image(45,322,'wizard')
+			.setOrigin(0.5,0.5)
+			.setScale(0.65)
+
+        this.nut = this.add.image(395,250, 'nut')
+            .setOrigin(0.5,0.5)
+            .setScale(0.31)
+
+            
+        this.timerframe = this.add.rectangle(400,52,220,80,0x000000,1)
+        this.timer = this.add.rectangle(400,52,200,60,0xffffff,1)
+        this.timerframe2 = this.add.rectangle(353,52,10,80,0x000000,1)
+
+        this.hourglass = this.add.image(325,52,'hourglass')
+            .setOrigin(0.5,0.5)
+            .setScale(0.13)
+
+        this.second = this.add.text(470,50, 's',nuttyStyle)
+
+        this.NuttyModeLabel = this.add.text(400, 475, 'NUTTY MODE ON!', nuttyStyle)
+            .setOrigin(0.5, 0.5)
+        
 
         this.cursors = this.input.keyboard.createCursorKeys() // can access cursor keys, space bar and shift
     }
@@ -96,10 +225,6 @@ class Game extends Phaser.Scene
     // by default phaser updates 60 frames / second
     update()
     {
-<<<<<<< HEAD
-        // this.MessageHandler()
-        console.log(this.directionInput)
-=======
         /* Use for deployment on server, read from nios */
         // this.MessageHandler()
         // console.log(this.directionInput)
@@ -121,19 +246,20 @@ class Game extends Phaser.Scene
         // }   
 
         /* Use for local testing, keyboard inputs */
->>>>>>> main
         this.checkNuttyMode()
         
         if(this.NuttyMode == 0)
         {   
             this.NuttyModeLabel.setPosition(-10000, -10000)
+            this.nut.setPosition(-1000,-1000)
             if(this.Score == this.Currentscore){
                 this.checkKeyboardInput()         
             }
         }
         else if(this.NuttyMode == 1)
         {   
-            this.NuttyModeLabel.setPosition(400, 450)
+            this.NuttyModeLabel.setPosition(400, 475)
+            this.nut.setPosition(395,250)
             if(this.Score == this.Currentscore){
                 this.checkNuttyKeyboardInput()     
             }
@@ -209,13 +335,13 @@ class Game extends Phaser.Scene
     incrementScore()
     {
         this.Score += 1
-        this.ScoreLabel.text = this.Score
+        this.ScoreLabel1.text = this.Score
     }
 
     decrementScore()
     {
         this.Score -= 1
-        this.ScoreLabel.text = this.Score
+        this.ScoreLabel1.text = this.Score
     }
 
     revertarrowColor()
@@ -325,6 +451,7 @@ class Game extends Phaser.Scene
         }
         else if(this.cursors.right.isDown && this.dir == 3){
             this.incrementScore()
+        }
     }
 }
 
