@@ -1,7 +1,12 @@
 import Phaser from 'phaser'
+import * as Colyseus from 'colyseus.js'
 
 class Game extends Phaser.Scene
 {
+    constructor()
+    {
+        super({ key: 'game' });
+    }
     refreshFrameTimer = Phaser.Time.TimerEvent;
     refreshFrameTimer2 = Phaser.Time.TimerEvent;
     refreshFrameInterval = 4000;
@@ -112,7 +117,10 @@ class Game extends Phaser.Scene
             if(this.Score == this.Currentscore){
                 this.checkNuttyKeyboardInput()     
             }
-        }   
+        }
+
+        // print out time left in game to console
+        console.log(this.game.timeLeft)
     }
     
     // handles all incoming messages from websockets
@@ -184,12 +192,7 @@ class Game extends Phaser.Scene
     incrementScore()
     {
         this.Score += 1
-        this.ScoreLabel.text = this.Score
-    }
-
-    decrementScore()
-    {
-        this.Score -= 1
+        this.game.room.send("score", 1)
         this.ScoreLabel.text = this.Score
     }
 
@@ -216,31 +219,18 @@ class Game extends Phaser.Scene
 
     checkMQTTKeyboardInput()
     {
-        // TODO: check input from this.directionInput instead
         if(this.directionInput.up && this.dir == 1){
             this.incrementScore()
         }
-        // else if(this.directionInput.up && this.dir != 1){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.down && this.dir == 2){
             this.incrementScore()
         }
-        // else if(this.directionInput.down && this.dir != 2){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.left && this.dir == 3){
             this.incrementScore()
         }
-        // else if(this.directionInput.left && this.dir != 3){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.right && this.dir == 4){
             this.incrementScore()
         }
-        // else if(this.directionInput.right && this.dir != 4){
-        //     this.decrementScore()
-        // }
     }
 
     checkMQTTNuttyKeyboardInput()
@@ -248,27 +238,15 @@ class Game extends Phaser.Scene
         if(this.directionInput.up && this.dir == 2){
             this.incrementScore()
         }
-        // else if(this.directionInput.up && this.dir != 2){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.down && this.dir == 1){
             this.incrementScore()
         }
-        // else if(this.directionInput.down && this.dir != 1){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.left && this.dir == 4){
             this.incrementScore()
         }
-        // else if(this.directionInput.left && this.dir != 4){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.right && this.dir == 3){
             this.incrementScore()
         }
-        // else if(this.directionInput.right && this.dir != 3){
-        //     this.decrementScore()
-        // }
     }
 
     checkKeyboardInput()

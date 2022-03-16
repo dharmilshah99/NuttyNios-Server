@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 import 'regenerator-runtime/runtime'
 
 import TitleScreen from './scenes/TitleScreen'
-
+import GameOver from './scenes/endscene'
 import Game from './scenes/game'
 
 const config = {
@@ -23,7 +23,7 @@ const config = {
 
 const game = new Phaser.Game(config) //create game instance
 
-game.scene.add('titlescreen', TitleScreen) //TitleScreen keyed to string 'titlescreen'
+game.scene.add('titlescreen', TitleScreen)
 game.scene.add('game', Game)
-
+game.scene.add('gameover', GameOver)
 game.scene.start('titlescreen')
