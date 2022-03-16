@@ -5,3 +5,4 @@ aiofiles
 requests
 asyncio
 websockets
+pymongo

@@ -1,7 +1,7 @@
 import json
-from fastapi import FastAPI, WebSocketDisconnect, WebSocket
 import paho.mqtt.client as paho
 from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, WebSocketDisconnect, WebSocket
 
 from src.utils import *
 
@@ -13,6 +13,9 @@ MQTT_CLIENT = paho.Client("NuttyNios-Endpoints")
 HOSTNAME = "mosquitto-bridge"
 PORT = 1883
 
+MONGO_HOSTNAME = "nuttynios-mongodb"
+MONGO_PORT = 27017
+
 Manager = ConnectionManager()
 
 ###
@@ -21,14 +24,42 @@ Manager = ConnectionManager()
 
 app = FastAPI(
     title="NuttyNios Data Server",
-    description="Server that republishes data sent to the MQTT bridge"
+    description="Websocket and HTTP Request Server"
 )
 
-@app.get("/")
-async def get():
-    return HTMLResponse(html)
+tags_metadata = [
+    {
+        "name": "Database Endpoints",
+        "description": "Endpoints that talk to the database.",
+    },
+]
 
 
+# HTTP Endpoints
+@app.get("/node/{node_name}/configuration", tags=["Database Endpoints"], response_model=BoardConfiguration)
+async def get_node_configuration(node_name: str):
+    try:
+        with MongoDB(MONGO_HOSTNAME, MONGO_PORT) as mongo_client:
+            db = mongo_client["node"]
+            coll = db["configurations"]
+            res = coll.find_one({"node_name": node_name})
+    except ConnectionError as e:
+        raise ConnectionError("Could not connect to DB")
+    return res
+
+
+@app.post("/node/{node_name}/configuration", status_code=201, tags=["Database Endpoints"])
+async def post_node_configuration(node_name: str, config_data: BoardConfiguration):
+    try:
+        with MongoDB(MONGO_HOSTNAME, MONGO_PORT) as mongo_client:
+            db = mongo_client["node"]
+            coll = db["configurations"]
+            coll.insert_one(config_data.dict())
+    except ConnectionError as e:
+        raise ConnectionError("Could not connect to DB")
+    return 200
+    
+# Websocket Endpoints
 @app.websocket("/ws/node/{node_name}/data/{data_topic}")
 async def get_datastream(websocket: WebSocket, node_name: str, data_topic: str):
     await Manager.connect(websocket)
