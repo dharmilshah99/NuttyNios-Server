@@ -6,9 +6,14 @@ import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
 import nut from '../characters/Nut.png'
 import hourglass from '../characters/Hourglass.png'
+import * as Colyseus from 'colyseus.js'
 
 class Game extends Phaser.Scene
 {
+    constructor()
+    {
+        super({ key: 'game' });
+    }
     refreshFrameTimer = Phaser.Time.TimerEvent;
     refreshFrameTimer2 = Phaser.Time.TimerEvent;
     refreshFrameInterval = 1000;
@@ -225,6 +230,11 @@ class Game extends Phaser.Scene
     // by default phaser updates 60 frames / second
     update()
     {
+        /* Update based on info from server */
+
+        this.updateScores()
+        this.second.text = this.game.timeLeft
+
         /* Use for deployment on server, read from nios */
         // this.MessageHandler()
         // console.log(this.directionInput)
@@ -263,7 +273,10 @@ class Game extends Phaser.Scene
             if(this.Score == this.Currentscore){
                 this.checkNuttyKeyboardInput()     
             }
-        }   
+        }
+
+        // print out time left in game to console
+        console.log(this.game.timeLeft)
     }
     
     // handles all incoming messages from websockets
@@ -282,11 +295,11 @@ class Game extends Phaser.Scene
             for(let i = 0; i < this.directionInputList.length; i++){
                 switch(this.directionInputList[i]) {
                     case 0:
-                      this.directionInput.up = true
-                      break;
-                    case 1:
                         this.directionInput.down = true
                       break;
+                    case 1:
+                        break;
+                        this.directionInput.up = true
                     case 2:
                         this.directionInput.left = true
                     break;
@@ -299,6 +312,15 @@ class Game extends Phaser.Scene
         // TODO: uncomment the following once messages are published to both topics
         // this.buttonsInput = this.game["buttons"].getMessage().buttons
         // this.switchesInput = this.game["switches"].getMessage().switches
+    }
+
+    // update scoreboard of every player
+    updateScores()
+    {
+        this.ScoreLabel1.text = this.game.playerScores.get("1")
+        this.ScoreLabel2.text = this.game.playerScores.get("2")
+        this.ScoreLabel3.text = this.game.playerScores.get("3")
+        this.ScoreLabel4.text = this.game.playerScores.get("4")
     }
 
     // this function is called every refreshFrameInterval
@@ -335,13 +357,7 @@ class Game extends Phaser.Scene
     incrementScore()
     {
         this.Score += 1
-        this.ScoreLabel1.text = this.Score
-    }
-
-    decrementScore()
-    {
-        this.Score -= 1
-        this.ScoreLabel1.text = this.Score
+        this.game.room.send("score", 1)
     }
 
     revertarrowColor()
@@ -367,31 +383,18 @@ class Game extends Phaser.Scene
 
     checkMQTTKeyboardInput()
     {
-        // TODO: check input from this.directionInput instead
         if(this.directionInput.up && this.dir == 1){
             this.incrementScore()
         }
-        // else if(this.directionInput.up && this.dir != 1){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.down && this.dir == 2){
             this.incrementScore()
         }
-        // else if(this.directionInput.down && this.dir != 2){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.left && this.dir == 3){
             this.incrementScore()
         }
-        // else if(this.directionInput.left && this.dir != 3){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.right && this.dir == 4){
             this.incrementScore()
         }
-        // else if(this.directionInput.right && this.dir != 4){
-        //     this.decrementScore()
-        // }
     }
 
     checkMQTTNuttyKeyboardInput()
@@ -399,27 +402,15 @@ class Game extends Phaser.Scene
         if(this.directionInput.up && this.dir == 2){
             this.incrementScore()
         }
-        // else if(this.directionInput.up && this.dir != 2){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.down && this.dir == 1){
             this.incrementScore()
         }
-        // else if(this.directionInput.down && this.dir != 1){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.left && this.dir == 4){
             this.incrementScore()
         }
-        // else if(this.directionInput.left && this.dir != 4){
-        //     this.decrementScore()
-        // }
         if(this.directionInput.right && this.dir == 3){
             this.incrementScore()
         }
-        // else if(this.directionInput.right && this.dir != 3){
-        //     this.decrementScore()
-        // }
     }
 
     checkKeyboardInput()
