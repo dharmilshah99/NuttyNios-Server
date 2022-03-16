@@ -1,3 +1,4 @@
 /mosquitto/config/certs/*
 **/passwords.txt
 /mosquitto-bridge/config/certs*
+/NuttyNios-MongoDB

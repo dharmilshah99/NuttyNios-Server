@@ -1,11 +1,40 @@
 import time
 from fastapi import WebSocket
 from typing import List
+from pydantic import BaseModel
+from pymongo import MongoClient
+
+
+###
+# Models
+###
+
+class BoardConfiguration(BaseModel):
+    node_name: str
+    display_text: str
+    up_threshold: int
+    down_threshold: int
+    left_threshold: int
+    right_threshold: int
 
 
 ###
 # Helpers
 ###
+
+class MongoDB:
+    """Handles MongoDB Connections"""
+    def __init__(self, ip: str, port: int):
+        self.ip = ip
+        self.port = port
+
+    def __enter__(self):
+        self.client = MongoClient(self.ip, self.port)
+        return self.client
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.client.close()
+        del self.client
 
 class MQTT(object):
     def __init__(self, client, hostname, port, topic):

@@ -7,6 +7,7 @@ import mummy from '../characters/Mummy.png'
 import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
 import autoBind from 'auto-bind';
+
 export default class TitleScreen extends Phaser.Scene
 {
     refreshFrameTimer = Phaser.Time.TimerEvent;
@@ -23,7 +24,7 @@ export default class TitleScreen extends Phaser.Scene
 	init()
 	{
 		this.host = window.location.hostname
-		this.client = new Colyseus.Client('ws://' + this.host +':25670');
+		this.client = new Colyseus.Client('ws://' + this.host + ':25670');
 	}
 
 	preload()
@@ -171,19 +172,19 @@ export default class TitleScreen extends Phaser.Scene
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5)
+			.setOrigin(0.5)
 
 		this.add.text(499, 362, 'PRESS 3 FOR', {
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5)
+			.setOrigin(0.5)
 
 		this.add.text(499, 380, 'PLAYER 3', {
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5)
+			.setOrigin(0.5)
 
 		this.add.text(697, 362, 'PRESS 4 FOR', {
 			fontSize: 12,
@@ -223,9 +224,9 @@ export default class TitleScreen extends Phaser.Scene
 		this.input.keyboard.once('keydown-ONE', () => {
 			console.log("1 is pressed")
 			this.nodeNum = "0"
-			this.game["direction"] = new WebSocketHandler("18000", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18000", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("18000", this.nodeNum, "switch")
+			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
 
 			this.game.playerNum = "1"
 			this.game.room.send("playerIdent", 1)
@@ -235,9 +236,9 @@ export default class TitleScreen extends Phaser.Scene
 		this.input.keyboard.once('keydown-TWO', () => {
 			console.log("2 is pressed")
 			this.nodeNum = "1"
-			this.game["direction"] = new WebSocketHandler("18001", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18001", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("18001", this.nodeNum, "switch")
+			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
 			
 			this.game.playerNum = "2"
 			this.game.room.send("playerIdent", 2)
@@ -247,9 +248,9 @@ export default class TitleScreen extends Phaser.Scene
 		this.input.keyboard.once('keydown-THREE', () => {
 			console.log("3 is pressed")
 			this.nodeNum = "2"
-			this.game["direction"] = new WebSocketHandler("18002", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18002", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("18002", this.nodeNum, "switch")
+			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
 
 			this.game.playerNum = "3"
 			this.game.room.send("playerIdent", 3)
@@ -259,9 +260,9 @@ export default class TitleScreen extends Phaser.Scene
 		this.input.keyboard.once('keydown-FOUR', () => {
 			console.log("4 is pressed")
 			this.nodeNum = "3"
-			this.game["direction"] = new WebSocketHandler("18003", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("18003", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("18003", this.nodeNum, "switch")
+			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
+			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
 			
 			this.game.playerNum = "4"
 			this.game.room.send("playerIdent", 4)
