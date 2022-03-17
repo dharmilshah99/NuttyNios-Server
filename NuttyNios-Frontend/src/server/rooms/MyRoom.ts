@@ -5,7 +5,7 @@ import { Player } from "../utils/player";
 export class MyRoom extends Room<MyRoomState>{
     private playerMap: Map<string, Player>;
     private readyState: boolean;
-    private gameSessionDuration: number = 1;
+    private gameSessionDuration: number = 20;
 
     constructor() {
         super();
@@ -31,28 +31,25 @@ export class MyRoom extends Room<MyRoomState>{
         }
     }
 
-<<<<<<< HEAD
-    onCreate(options: any) {
-=======
-    private updateRank(){
+    private updateRank() {
         let playerScoresArray: number[] = []
-       
-        this.state.playerScores.forEach((value,key) => {
+
+        this.state.playerScores.forEach((value, key) => {
             playerScoresArray.push(value)
         });
 
         console.log(playerScoresArray)
-        playerScoresArray.sort((a,b) => 0 - (a > b ? 1 : -1));
+        playerScoresArray.sort((a, b) => 0 - (a > b ? 1 : -1));
         console.log(playerScoresArray)
 
         let playerScoresCopy = this.state.playerScores.clone();
         for (let i = 1; i <= playerScoresArray.length; i++) {
-            let score: number = playerScoresArray[i-1];
+            let score: number = playerScoresArray[i - 1];
             let found: boolean = false;
 
-            playerScoresCopy.forEach((value,key) => {
-                if(value == score && !found){
-                    this.state.playerRank.set(i.toString(),key);
+            playerScoresCopy.forEach((value, key) => {
+                if (value == score && !found) {
+                    this.state.playerRank.set(i.toString(), key);
                     playerScoresCopy.delete(key);
                     found = true;
                 }
@@ -60,8 +57,7 @@ export class MyRoom extends Room<MyRoomState>{
         }
     }
 
-    onCreate (options: any){
->>>>>>> feat/game_server
+    onCreate(options: any) {
         console.log("onCreate executed")
         this.setState(new MyRoomState());
 
@@ -90,13 +86,9 @@ export class MyRoom extends Room<MyRoomState>{
             let playerNum = this.playerMap.get(client.id).getPlayerNum;
             let playerNumString = playerNum.toString();
             let prevScore = this.state.playerScores.get(playerNumString);
-<<<<<<< HEAD
             this.state.playerScores.set(playerNumString, prevScore + message);
-=======
-            this.state.playerScores.set(playerNumString, prevScore+message);
             this.updateRank();
             console.log(this.state.playerRank.get("4"))
->>>>>>> feat/game_server
         });
 
         this.onMessage("start-attempt", (client, message) => {
