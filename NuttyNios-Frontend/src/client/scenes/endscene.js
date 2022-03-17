@@ -216,7 +216,7 @@ export default class GameOver extends Phaser.Scene {
 			color: "#ffffff"
 		})
 			.setOrigin(0.5, 0.5)
-
+    
 		this.input.keyboard.once('keydown-SPACE', () => {
 			this.game.room.send("restart", 1)
 		})
