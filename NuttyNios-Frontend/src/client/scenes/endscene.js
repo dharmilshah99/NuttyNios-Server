@@ -142,13 +142,25 @@ export default class GameOver extends Phaser.Scene {
 		this.playerName1 = this.add.rectangle(415, 197, 240, 45, 0xffffff, 1)
 			.setOrigin(0.5, 0.5)
 
+		this.playerRank1 = this.add.text(415, 197, "Player " + this.game.playerRank.get("1"), leaderboardStyle)
+			.setOrigin(0.5, 0.5)
+
 		this.playerName2 = this.add.rectangle(415, 250, 240, 45, 0xffffff, 1)
 			.setOrigin(0.5, 0.5)
 
-		this.playerName2 = this.add.rectangle(415, 303, 240, 45, 0xffffff, 1)
+		this.playerRank2 = this.add.text(415, 250, "Player " + this.game.playerRank.get("2"), leaderboardStyle)
 			.setOrigin(0.5, 0.5)
 
-		this.playerName2 = this.add.rectangle(415, 356, 240, 45, 0xffffff, 1)
+		this.playerName3 = this.add.rectangle(415, 303, 240, 45, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+
+		this.playerRank3 = this.add.text(415, 303, "Player " + this.game.playerRank.get("3"), leaderboardStyle)
+			.setOrigin(0.5, 0.5)
+
+		this.playerName4 = this.add.rectangle(415, 356, 240, 45, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+
+		this.playerRank4 = this.add.text(415, 356, "Player " + this.game.playerRank.get("4"), leaderboardStyle)
 			.setOrigin(0.5, 0.5)
 
 		this.playernamelabel = this.add.text(415, 144, "Player Name", leaderboardStyle)
@@ -160,13 +172,25 @@ export default class GameOver extends Phaser.Scene {
 		this.score1 = this.add.rectangle(593, 197, 100, 45, 0xffffff, 1)
 			.setOrigin(0.5, 0.5)
 
+		this.numscore1 = this.add.text(593, 197, this.game.playerScores.get(this.game.playerRank.get("1")), leaderboardStyle)
+			.setOrigin(0.5, 0.5)
+
 		this.score2 = this.add.rectangle(593, 250, 100, 45, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+
+		this.numscore2 = this.add.text(593, 250, this.game.playerScores.get(this.game.playerRank.get("2")), leaderboardStyle)
 			.setOrigin(0.5, 0.5)
 
 		this.score3 = this.add.rectangle(593, 303, 100, 45, 0xffffff, 1)
 			.setOrigin(0.5, 0.5)
 
-		this.score3 = this.add.rectangle(593, 356, 100, 45, 0xffffff, 1)
+		this.numscore3 = this.add.text(593, 303, this.game.playerScores.get(this.game.playerRank.get("3")), leaderboardStyle)
+			.setOrigin(0.5, 0.5)
+
+		this.score4 = this.add.rectangle(593, 356, 100, 45, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+
+		this.numscore4 = this.add.text(593, 356, this.game.playerScores.get(this.game.playerRank.get("4")), leaderboardStyle)
 			.setOrigin(0.5, 0.5)
 
 		this.socrelabel = this.add.text(593, 144, "Score", leaderboardStyle)
@@ -192,7 +216,7 @@ export default class GameOver extends Phaser.Scene {
 			color: "#ffffff"
 		})
 			.setOrigin(0.5, 0.5)
-
+    
 		this.input.keyboard.once('keydown-SPACE', () => {
 			this.game.room.send("restart", 1)
 		})
