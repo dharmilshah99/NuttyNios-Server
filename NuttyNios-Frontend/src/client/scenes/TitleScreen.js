@@ -24,7 +24,7 @@ export default class TitleScreen extends Phaser.Scene
 	init()
 	{
 		this.host = window.location.hostname
-		this.client = new Colyseus.Client('ws://' + this.host + ':25670');
+		this.client = new Colyseus.Client('ws://' + this.host + ':25680');
 	}
 
 	preload()
@@ -81,10 +81,17 @@ export default class TitleScreen extends Phaser.Scene
 		this.game.room.onStateChange((newState) => {
 			this.game.playerScores = newState.playerScores
 			this.game.timeLeft = newState.timeLeft
+			this.game.playerRank = newState.playerRank
+
 			console.log("Player 1: "+this.game.playerScores.get("1"))
 			console.log("Player 2: " +this.game.playerScores.get("2"))
 			console.log("Player 3: " +this.game.playerScores.get("3"))
 			console.log("Player 4: " +this.game.playerScores.get("4"))
+
+			console.log("Rank 1: "+this.game.playerRank.get("1"))
+			console.log("Rank 2: " +this.game.playerRank.get("2"))
+			console.log("Rank 3: " +this.game.playerRank.get("3"))
+			console.log("Rank 4: " +this.game.playerRank.get("4"))
 
 		});
 		
