@@ -1,16 +1,27 @@
 import { Room, Client } from "colyseus";
 import { MyRoomState } from "./schema/MyRoomState";
 import { Player } from "../utils/player";
+import { MQTTHandler } from "../utils/mqtthandler";
+import * as mqtt from "mqtt"
 
 export class MyRoom extends Room<MyRoomState>{
     private playerMap: Map<string, Player>;
     private readyState: boolean;
     private gameSessionDuration: number = 20;
+    private MQTTClient: MQTTHandler;
 
     constructor() {
         super();
         this.playerMap = new Map<string, Player>();
         this.readyState = false;
+        this.MQTTClient = new MQTTHandler("mosquitto-bridge",11883);
+        this.MQTTClient._subscribe("test");
+        this.MQTTClient._publish("test", "hello there!");
+
+        this.MQTTClient._subscribe("node/0/data/score");
+        this.MQTTClient._subscribe("node/1/data/score");
+        this.MQTTClient._subscribe("node/2/data/score");
+        this.MQTTClient._subscribe("node/3/data/score");
     }
 
     private allPlayersReady(): boolean {
@@ -55,6 +66,13 @@ export class MyRoom extends Room<MyRoomState>{
                 }
             });
         }
+    }
+
+    private publishScores(){
+        this.state.playerScores.forEach((value, key) => {
+            var topic = "node/"+key+"/data/score"
+            this.MQTTClient._publish(topic, value.toString())
+        });
     }
 
     onCreate(options: any) {
@@ -113,7 +131,7 @@ export class MyRoom extends Room<MyRoomState>{
                         this.clock.clear();
                         this.clock.stop();
 
-                        // TODO: transmit scores to client via MQTT
+                        this.publishScores();
                     }
                 }, 1000);
             }

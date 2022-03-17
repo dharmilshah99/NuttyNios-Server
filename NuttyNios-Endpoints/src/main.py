@@ -57,7 +57,6 @@ async def post_node_configuration(node_name: str, config_data: BoardConfiguratio
             coll.insert_one(config_data.dict())
     except ConnectionError as e:
         raise ConnectionError("Could not connect to DB")
-    return 200
     
 # Websocket Endpoints
 @app.websocket("/ws/node/{node_name}/data/{data_topic}")
