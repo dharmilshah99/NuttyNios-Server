@@ -2,10 +2,10 @@ import { Room, Client } from "colyseus";
 import { MyRoomState } from "./schema/MyRoomState";
 import { Player } from "../utils/player";
 
-export class MyRoom extends Room <MyRoomState>{
+export class MyRoom extends Room<MyRoomState>{
     private playerMap: Map<string, Player>;
     private readyState: boolean;
-    private gameSessionDuration: number = 15;
+    private gameSessionDuration: number = 1;
 
     constructor() {
         super();
@@ -22,7 +22,7 @@ export class MyRoom extends Room <MyRoomState>{
         return true;
     }
 
-    private resetGame(){
+    private resetGame() {
         this.state.running = false;
         this.readyState = false;
         this.state.playerScores.clear();
@@ -31,7 +31,7 @@ export class MyRoom extends Room <MyRoomState>{
         }
     }
 
-    onCreate (options: any){
+    onCreate(options: any) {
         console.log("onCreate executed")
         this.setState(new MyRoomState());
 
@@ -42,11 +42,11 @@ export class MyRoom extends Room <MyRoomState>{
                 this.state.playerScores.set(this.playerMap.get(client.id).getPlayerNum.toString(), 0);
             }
 
-            if (this.allPlayersReady()){
+            if (this.allPlayersReady()) {
                 console.log("all players ready")
                 this.readyState = true
             }
-            else{
+            else {
                 this.readyState = false
             }
         });
@@ -58,12 +58,12 @@ export class MyRoom extends Room <MyRoomState>{
         this.onMessage("score", (client, message) => {
             let playerNumString = this.playerMap.get(client.id).getPlayerNum.toString();
             let prevScore = this.state.playerScores.get(playerNumString);
-            this.state.playerScores.set(playerNumString, prevScore+message);
+            this.state.playerScores.set(playerNumString, prevScore + message);
         });
 
-        this.onMessage("start-attempt", (client, message) =>{
+        this.onMessage("start-attempt", (client, message) => {
             console.log("start-attempt")
-            if(this.readyState){
+            if (this.readyState) {
                 console.log("start-successful")
                 this.broadcast("start-game", 1)
                 this.state.running = true;
@@ -74,28 +74,28 @@ export class MyRoom extends Room <MyRoomState>{
                 // Set an interval and store a reference to it
                 // so that we may clear it later
                 this.clock.setInterval(() => {
-                    if(this.state.timeLeft > 0){
+                    if (this.state.timeLeft > 0) {
                         this.state.timeLeft -= 1;
                         console.log("Time now " + this.state.timeLeft);
                     }
-                    else{
+                    else {
                         this.broadcast("end-game", 1)
                         this.clock.clear();
                         this.clock.stop();
-                        
+
                         // TODO: transmit scores to client via MQTT
                     }
                 }, 1000);
             }
         });
-        
-        this.onMessage("restart", (client, message) =>{
+
+        this.onMessage("restart", (client, message) => {
             this.broadcast("new-game", 1);
             this.resetGame();
         });
     }
-    
-    
+
+
     onJoin(client: Client, options: any) {
         this.playerMap.set(client.id, new Player(client.id, false));
         console.log(client.id + " Player created")
