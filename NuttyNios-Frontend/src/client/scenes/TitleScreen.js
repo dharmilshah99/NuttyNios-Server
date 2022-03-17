@@ -8,34 +8,30 @@ import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
 import autoBind from 'auto-bind';
 
-export default class TitleScreen extends Phaser.Scene
-{
-    refreshFrameTimer = Phaser.Time.TimerEvent;
-    refreshFrameTimer2 = Phaser.Time.TimerEvent;
-    refreshFrameInterval = 800;
-    refreshFrameInterval2 = 815;
+export default class TitleScreen extends Phaser.Scene {
+	refreshFrameTimer = Phaser.Time.TimerEvent;
+	refreshFrameTimer2 = Phaser.Time.TimerEvent;
+	refreshFrameInterval = 800;
+	refreshFrameInterval2 = 815;
 
-	constructor()
-    {
-        super({ key: 'titlescreen' });
+	constructor() {
+		super({ key: 'titlescreen' });
 		autoBind(this)
-    }
-
-	init()
-	{
-		this.host = window.location.hostname
-		this.client = new Colyseus.Client('ws://' + this.host + ':25680');
 	}
 
-	preload()
-	{
+	init() {
+		this.host = window.location.hostname
+		this.client = new Colyseus.Client('ws://' + this.host + ':25670');
+	}
+
+	preload() {
 		const fonts = new WebFontFile(this.load, 'Press Start 2P')
 		this.load.addFile(fonts)
 
 		this.load.image('frog', frog)
 		this.load.image('mummy', mummy)
 		this.load.image('ogre', ogre)
-		this.load.image('wizard',wizard)
+		this.load.image('wizard', wizard)
 
 	}
 
@@ -48,53 +44,52 @@ export default class TitleScreen extends Phaser.Scene
 			newScene.scene.start();
 			this.scene.bringToTop(sceneToStart);
 			this.uiSceneRunning = sceneToStart;
-	
+
 			return newScene;
 		} else {
 			return this.scene.get(this.uiSceneRunning);
 		}
 	}
 
-	async create()
-	{
+	async create() {
 		this.refreshFrameTimer = this.time.addEvent({
-            callback: this.TimerEvent,
-            callbackScope: this,
-            delay: this.refreshFrameInterval,
-            loop: true
-        })
+			callback: this.TimerEvent,
+			callbackScope: this,
+			delay: this.refreshFrameInterval,
+			loop: true
+		})
 
 		this.refreshFrameTimer2 = this.time.addEvent({
-            callback: this.TimerEvent2,
-            callbackScope: this,
-            delay: this.refreshFrameInterval2,
-            loop: true
-        })
+			callback: this.TimerEvent2,
+			callbackScope: this,
+			delay: this.refreshFrameInterval2,
+			loop: true
+		})
 
 		/* ============= Server Sync Helpers ============ */
 		// Create synchronised room sessiom
 		this.game.room = await this.client.joinOrCreate("my_room");
 		console.log(this.game.room.sessionId);
 		this.uiSceneRunning = "titlescreen"
-		
+
 		// State change handler
 		this.game.room.onStateChange((newState) => {
 			this.game.playerScores = newState.playerScores
 			this.game.timeLeft = newState.timeLeft
 			this.game.playerRank = newState.playerRank
 
-			console.log("Player 1: "+this.game.playerScores.get("1"))
-			console.log("Player 2: " +this.game.playerScores.get("2"))
-			console.log("Player 3: " +this.game.playerScores.get("3"))
-			console.log("Player 4: " +this.game.playerScores.get("4"))
+			console.log("Player 1: " + this.game.playerScores.get("1"))
+			console.log("Player 2: " + this.game.playerScores.get("2"))
+			console.log("Player 3: " + this.game.playerScores.get("3"))
+			console.log("Player 4: " + this.game.playerScores.get("4"))
 
-			console.log("Rank 1: "+this.game.playerRank.get("1"))
-			console.log("Rank 2: " +this.game.playerRank.get("2"))
-			console.log("Rank 3: " +this.game.playerRank.get("3"))
-			console.log("Rank 4: " +this.game.playerRank.get("4"))
+			console.log("Rank 1: " + this.game.playerRank.get("1"))
+			console.log("Rank 2: " + this.game.playerRank.get("2"))
+			console.log("Rank 3: " + this.game.playerRank.get("3"))
+			console.log("Rank 4: " + this.game.playerRank.get("4"))
 
 		});
-		
+
 		// Message handlers
 		this.game.room.onMessage("start-game", (message) => {
 			this.sleepPreviousParallelScene("game")
@@ -110,70 +105,70 @@ export default class TitleScreen extends Phaser.Scene
 		});
 
 		/* ============= UI ============ */
-		this.backgroundelement4 = this.add.circle(400,500,700,0x0380fc,1)
-			.setOrigin(0.5,0.5)
-		this.backgroundelement3 = this.add.circle(400,500,600,0xfff86e,1)
-			.setOrigin(0.5,0.5)
-		this.backgroundelement2 = this.add.circle(400,500,500,0xff1dce,1)
-			.setOrigin(0.5,0.5)
-		this.backgroundelement4 = this.add.circle(400,500,400,0x0380fc,1)
-			.setOrigin(0.5,0.5)
-		this.backgroundelement3 = this.add.circle(400,500,300,0xfff86e,1)
-			.setOrigin(0.5,0.5)
-		this.backgroundelement2 = this.add.circle(400,500,200,0xff1dce,1)
-			.setOrigin(0.5,0.5)
-		this.backgroundelement1 = this.add.circle(400,500,100,0x0380fc,1)
-			.setOrigin(0.5,0.5)
+		this.backgroundelement4 = this.add.circle(400, 500, 700, 0x0380fc, 1)
+			.setOrigin(0.5, 0.5)
+		this.backgroundelement3 = this.add.circle(400, 500, 600, 0xfff86e, 1)
+			.setOrigin(0.5, 0.5)
+		this.backgroundelement2 = this.add.circle(400, 500, 500, 0xff1dce, 1)
+			.setOrigin(0.5, 0.5)
+		this.backgroundelement4 = this.add.circle(400, 500, 400, 0x0380fc, 1)
+			.setOrigin(0.5, 0.5)
+		this.backgroundelement3 = this.add.circle(400, 500, 300, 0xfff86e, 1)
+			.setOrigin(0.5, 0.5)
+		this.backgroundelement2 = this.add.circle(400, 500, 200, 0xff1dce, 1)
+			.setOrigin(0.5, 0.5)
+		this.backgroundelement1 = this.add.circle(400, 500, 100, 0x0380fc, 1)
+			.setOrigin(0.5, 0.5)
 
-		this.button1frame = this.add.ellipse(103,370,193,90,0xffffff,1)
-			.setOrigin(0.5,0.5)
-		this.button1 = this.add.ellipse(103,370,173,70,0x000000,1)
-			.setOrigin(0.5,0.5)
+		this.button1frame = this.add.ellipse(103, 370, 193, 90, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+		this.button1 = this.add.ellipse(103, 370, 173, 70, 0x000000, 1)
+			.setOrigin(0.5, 0.5)
 
-		this.button2frame = this.add.ellipse(301,370,193,90,0xffffff,1)
-			.setOrigin(0.5,0.5)
-		this.button2 = this.add.ellipse(301,370,173,70,0x000000,1)
-			.setOrigin(0.5,0.5)
+		this.button2frame = this.add.ellipse(301, 370, 193, 90, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+		this.button2 = this.add.ellipse(301, 370, 173, 70, 0x000000, 1)
+			.setOrigin(0.5, 0.5)
 
-		this.button3frame = this.add.ellipse(499,370,193,90,0xffffff,1)
-			.setOrigin(0.5,0.5)
-		this.button3 = this.add.ellipse(499,370,173,70,0x000000,1)
-			.setOrigin(0.5,0.5)
-		
-		this.button4frame = this.add.ellipse(697,370,193,90,0xffffff,1)
-			.setOrigin(0.5,0.5)
-		this.button4 = this.add.ellipse(697,370,173,70,0x000000,1)
-			.setOrigin(0.5,0.5)
+		this.button3frame = this.add.ellipse(499, 370, 193, 90, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+		this.button3 = this.add.ellipse(499, 370, 173, 70, 0x000000, 1)
+			.setOrigin(0.5, 0.5)
+
+		this.button4frame = this.add.ellipse(697, 370, 193, 90, 0xffffff, 1)
+			.setOrigin(0.5, 0.5)
+		this.button4 = this.add.ellipse(697, 370, 173, 70, 0x000000, 1)
+			.setOrigin(0.5, 0.5)
 
 		const title = this.add.text(400, 75, 'TILT TILT', {
 			fontSize: 48,
 			fontFamily: ' "Press Start 2P" '
 		})
 		title.setOrigin(0.5, 0.5)
-		const subtitle = this.add.text(400, 150, '- A Nutty Nios Game -',{
+		const subtitle = this.add.text(400, 150, '- A Nutty Nios Game -', {
 			fontSize: 25,
 			fontFamily: ' "Press Start 2P" '
 		})
 		subtitle.setOrigin(0.5, 0.5)
-		
-		
+
+
 		this.add.text(103, 362, 'PRESS 1 FOR', {
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5, 0.5)
+			.setOrigin(0.5, 0.5)
 
 		this.add.text(103, 380, 'PLAYER 1', {
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5, 0.5)
+			.setOrigin(0.5, 0.5)
 
 		this.add.text(301, 362, 'PRESS 2 FOR', {
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5)
+			.setOrigin(0.5)
 
 		this.add.text(301, 380, 'PLAYER 2', {
 			fontSize: 12,
@@ -197,34 +192,34 @@ export default class TitleScreen extends Phaser.Scene
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5)
+			.setOrigin(0.5)
 
 		this.add.text(697, 380, 'PLAYER 4', {
 			fontSize: 12,
 			fontFamily: ' "Press Start 2P" '
 		})
-		.setOrigin(0.5)
-		
+			.setOrigin(0.5)
+
 		this.startInstruction = this.add.text(400, 480, 'PRESS SPACE TO START', {
 			fontFamily: ' "Press Start 2P" ',
 			fontSize: 19
 		})
-		.setOrigin(0.5)
+			.setOrigin(0.5)
 
-		const frog = this.add.image(103,250,'frog')
-			.setOrigin(0.5,0.5)
+		const frog = this.add.image(103, 250, 'frog')
+			.setOrigin(0.5, 0.5)
 			.setScale(2)
 
-		const mummy = this.add.image(301,250,'mummy')
-			.setOrigin(0.5,0.5)
+		const mummy = this.add.image(301, 250, 'mummy')
+			.setOrigin(0.5, 0.5)
 			.setScale(2)
 
-		const ogre = this.add.image(499,250,'ogre')
-			.setOrigin(0.5,0.5)
+		const ogre = this.add.image(499, 250, 'ogre')
+			.setOrigin(0.5, 0.5)
 			.setScale(1.15)
 
-		const wizard = this.add.image(697,250,'wizard')
-			.setOrigin(0.5,0.5)
+		const wizard = this.add.image(697, 250, 'wizard')
+			.setOrigin(0.5, 0.5)
 			.setScale(1.2)
 
 
@@ -246,7 +241,7 @@ export default class TitleScreen extends Phaser.Scene
 			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
 			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
 			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
-			
+
 			this.game.playerNum = "2"
 			this.game.room.send("playerIdent", 2)
 			this.game.room.send("ready", 2)
@@ -270,24 +265,22 @@ export default class TitleScreen extends Phaser.Scene
 			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
 			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
 			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
-			
+
 			this.game.playerNum = "4"
 			this.game.room.send("playerIdent", 4)
 			this.game.room.send("ready", 4)
 		})
-		
+
 		this.input.keyboard.addListener('keydown-SPACE', () => {
 			this.game.room.send("start-attempt", 1)
 		})
 	}
 
-	TimerEvent()
-	{
-		this.startInstruction.setPosition(-1000,-1000)
+	TimerEvent() {
+		this.startInstruction.setPosition(-1000, -1000)
 	}
 
-	TimerEvent2()
-	{
-		this.startInstruction.setPosition(400,480)
+	TimerEvent2() {
+		this.startInstruction.setPosition(400, 480)
 	}
 }
