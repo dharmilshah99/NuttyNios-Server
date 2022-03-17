@@ -11,4 +11,8 @@ export class MyRoomState extends Schema {
     // key is playerNum, value is score
     playerScores = new MapSchema<number>(); 
 
+    @type({ map: "string" }) 
+    // key is rank, value is playerNum
+    playerRank = new MapSchema<string>(); 
+
 }
