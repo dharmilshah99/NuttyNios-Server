@@ -219,7 +219,7 @@ class Game extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setScale(0.13)
 
-        this.time = this.add.text(415, 55, '0', timeStyle)
+        this.timerecord = this.add.text(415, 55, '0', timeStyle)
             .setOrigin(0.5, 0.5)
 
         this.second = this.add.text(480, 60, 's', nuttyStyle)
@@ -237,7 +237,7 @@ class Game extends Phaser.Scene {
         /* Update based on info from server */
 
         this.updateScores()
-        this.time.text = this.game.timeLeft
+        this.timerecord.text = this.game.timeLeft
 
         /* Use for deployment on server, read from nios */
         // this.MessageHandler()
