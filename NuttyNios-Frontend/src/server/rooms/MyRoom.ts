@@ -31,7 +31,37 @@ export class MyRoom extends Room<MyRoomState>{
         }
     }
 
+<<<<<<< HEAD
     onCreate(options: any) {
+=======
+    private updateRank(){
+        let playerScoresArray: number[] = []
+       
+        this.state.playerScores.forEach((value,key) => {
+            playerScoresArray.push(value)
+        });
+
+        console.log(playerScoresArray)
+        playerScoresArray.sort((a,b) => 0 - (a > b ? 1 : -1));
+        console.log(playerScoresArray)
+
+        let playerScoresCopy = this.state.playerScores.clone();
+        for (let i = 1; i <= playerScoresArray.length; i++) {
+            let score: number = playerScoresArray[i-1];
+            let found: boolean = false;
+
+            playerScoresCopy.forEach((value,key) => {
+                if(value == score && !found){
+                    this.state.playerRank.set(i.toString(),key);
+                    playerScoresCopy.delete(key);
+                    found = true;
+                }
+            });
+        }
+    }
+
+    onCreate (options: any){
+>>>>>>> feat/game_server
         console.log("onCreate executed")
         this.setState(new MyRoomState());
 
@@ -45,6 +75,7 @@ export class MyRoom extends Room<MyRoomState>{
             if (this.allPlayersReady()) {
                 console.log("all players ready")
                 this.readyState = true
+                // this.state.playerRank.set("1", "1")
             }
             else {
                 this.readyState = false
@@ -56,9 +87,16 @@ export class MyRoom extends Room<MyRoomState>{
         });
 
         this.onMessage("score", (client, message) => {
-            let playerNumString = this.playerMap.get(client.id).getPlayerNum.toString();
+            let playerNum = this.playerMap.get(client.id).getPlayerNum;
+            let playerNumString = playerNum.toString();
             let prevScore = this.state.playerScores.get(playerNumString);
+<<<<<<< HEAD
             this.state.playerScores.set(playerNumString, prevScore + message);
+=======
+            this.state.playerScores.set(playerNumString, prevScore+message);
+            this.updateRank();
+            console.log(this.state.playerRank.get("4"))
+>>>>>>> feat/game_server
         });
 
         this.onMessage("start-attempt", (client, message) => {
