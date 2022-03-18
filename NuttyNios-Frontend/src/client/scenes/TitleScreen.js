@@ -312,6 +312,35 @@ export default class TitleScreen extends Phaser.Scene {
 		})
 	}
 
+	update() {
+		this.input.keyboard.once('keydown-ONE', () => {
+			this.revertStatusColor()
+			this.button1frame.fillColor = 0x32a850
+		})
+
+		this.input.keyboard.once('keydown-TWO', () => {
+			this.revertStatusColor()
+			this.button2frame.fillColor = 0x32a850
+		})
+
+		this.input.keyboard.once('keydown-THREE', () => {
+			this.revertStatusColor()
+			this.button3frame.fillColor = 0x32a850
+		})
+
+		this.input.keyboard.once('keydown-FOUR', () => {
+			this.revertStatusColor()
+			this.button4frame.fillColor = 0x32a850
+		})
+	}
+
+	revertStatusColor() {
+		this.button1frame.fillColor = 0xffffff
+		this.button2frame.fillColor = 0xffffff
+		this.button3frame.fillColor = 0xffffff
+		this.button4frame.fillColor = 0xffffff
+	}
+
 	TimerEvent() {
 		this.startInstruction.setPosition(-1000, -1000)
 	}
