@@ -13,7 +13,7 @@ export class MyRoom extends Room<MyRoomState>{
         super();
         this.playerMap = new Map<string, Player>();
         this.readyState = false;
-        // this.MQTTClient = new MQTTHandler("mosquitto-bridge", 1883);
+        this.MQTTClient = new MQTTHandler("mosquitto-bridge", 1883);
 
         /* DEBUGGING */
         // console.log("attempting to connect MQTT-game-server")
@@ -107,7 +107,6 @@ export class MyRoom extends Room<MyRoomState>{
             let prevScore = this.state.playerScores.get(playerNumString);
             this.state.playerScores.set(playerNumString, prevScore + message);
             this.updateRank();
-            console.log(this.state.playerRank.get("4"))
         });
 
         this.onMessage("start-attempt", (client, message) => {
@@ -132,7 +131,7 @@ export class MyRoom extends Room<MyRoomState>{
                         this.clock.clear();
                         this.clock.stop();
 
-                        // this.publishScores();
+                        this.publishScores();
                     }
                 }, 1000);
             }
