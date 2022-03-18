@@ -17,6 +17,10 @@ export class MQTTHandler {
         this.client.on('message', function(topic: string, message:any){
             console.log("Received message from: " + topic + " "+ message.toString());
         });
+
+        this.client.on('error', function(){
+            console.log("Error connecting to MQTT Bridge");
+        });
     }
 
     _subscribe(topic: string){

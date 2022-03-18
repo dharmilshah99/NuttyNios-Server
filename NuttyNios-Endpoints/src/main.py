@@ -2,6 +2,7 @@ import json
 import paho.mqtt.client as paho
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, WebSocketDisconnect, WebSocket
+import random
 
 from src.utils import *
 
@@ -9,7 +10,9 @@ from src.utils import *
 # Global Variable
 ###
 
-MQTT_CLIENT = paho.Client("NuttyNios-Endpoints")
+uniqueID = random.randint(0,9999)
+
+MQTT_CLIENT = paho.Client("NuttyNios-Endpoints" + str(uniqueID))
 HOSTNAME = "mosquitto-bridge"
 PORT = 1883
 

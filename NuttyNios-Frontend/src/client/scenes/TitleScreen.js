@@ -69,7 +69,7 @@ export default class TitleScreen extends Phaser.Scene {
 		/* ============= Server Sync Helpers ============ */
 		// Create synchronised room sessiom
 		this.game.room = await this.client.joinOrCreate("my_room");
-		console.log(this.game.room.sessionId);
+		// console.log(this.game.room.sessionId);
 		this.uiSceneRunning = "titlescreen"
 
 		// State change handler
@@ -78,15 +78,15 @@ export default class TitleScreen extends Phaser.Scene {
 			this.game.timeLeft = newState.timeLeft
 			this.game.playerRank = newState.playerRank
 
-			console.log("Player 1: " + this.game.playerScores.get("1"))
-			console.log("Player 2: " + this.game.playerScores.get("2"))
-			console.log("Player 3: " + this.game.playerScores.get("3"))
-			console.log("Player 4: " + this.game.playerScores.get("4"))
+			// console.log("Player 1: " + this.game.playerScores.get("1"))
+			// console.log("Player 2: " + this.game.playerScores.get("2"))
+			// console.log("Player 3: " + this.game.playerScores.get("3"))
+			// console.log("Player 4: " + this.game.playerScores.get("4"))
 
-			console.log("Rank 1: " + this.game.playerRank.get("1"))
-			console.log("Rank 2: " + this.game.playerRank.get("2"))
-			console.log("Rank 3: " + this.game.playerRank.get("3"))
-			console.log("Rank 4: " + this.game.playerRank.get("4"))
+			// console.log("Rank 1: " + this.game.playerRank.get("1"))
+			// console.log("Rank 2: " + this.game.playerRank.get("2"))
+			// console.log("Rank 3: " + this.game.playerRank.get("3"))
+			// console.log("Rank 4: " + this.game.playerRank.get("4"))
 
 		});
 
@@ -224,56 +224,52 @@ export default class TitleScreen extends Phaser.Scene {
 
 
 		this.input.keyboard.once('keydown-ONE', () => {
-			console.log("1 is pressed")
-			this.nodeNum = "0"
-			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
-
-			this.game.playerNum = "1"
-			this.game.room.send("playerIdent", 1)
-			this.game.room.send("ready", 1)
+			// console.log("1 is pressed")
+			this.playerSetUp(1)
 		})
 
 		this.input.keyboard.once('keydown-TWO', () => {
-			console.log("2 is pressed")
-			this.nodeNum = "1"
-			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
-
-			this.game.playerNum = "2"
-			this.game.room.send("playerIdent", 2)
-			this.game.room.send("ready", 2)
+			// console.log("2 is pressed")
+			this.playerSetUp(2)
 		})
 
 		this.input.keyboard.once('keydown-THREE', () => {
-			console.log("3 is pressed")
-			this.nodeNum = "2"
-			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
-
-			this.game.playerNum = "3"
-			this.game.room.send("playerIdent", 3)
-			this.game.room.send("ready", 3)
+			// console.log("3 is pressed")
+			this.playerSetUp(3)
 		})
 
 		this.input.keyboard.once('keydown-FOUR', () => {
-			console.log("4 is pressed")
-			this.nodeNum = "3"
-			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
-			this.game["buttons"] = new WebSocketHandler("19000", this.nodeNum, "button")
-			this.game["switches"] = new WebSocketHandler("19000", this.nodeNum, "switch")
-
-			this.game.playerNum = "4"
-			this.game.room.send("playerIdent", 4)
-			this.game.room.send("ready", 4)
+			// console.log("4 is pressed")
+			this.playerSetUp(4)
 		})
 
 		this.input.keyboard.addListener('keydown-SPACE', () => {
 			this.game.room.send("start-attempt", 1)
 		})
+
+		this.input.keyboard.once('keydown-E', () => {
+			this.game.room.send("difficulty", "0")
+		})
+
+		this.input.keyboard.once('keydown-H', () => {
+			this.game.room.send("difficulty", "1")
+		})
+	}
+
+	playerSetUp(playerNum){
+		this.nodeNum = (playerNum-1).toString()
+		this.game.playerNum = playerNum.toString()
+		this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+		this.game.room.send("playerIdent", this.game.playerNum)
+
+		// while(!this.game["direction"].isValid()){
+		// 	console.log("in while loop")
+		// 	if(this.game["direction"].isValid()){
+		// 		break;
+		// 	}
+		// }
+		// console.log("out of while loop")
+		this.game.room.send("ready", this.game.playerNum)
 	}
 
 	TimerEvent() {

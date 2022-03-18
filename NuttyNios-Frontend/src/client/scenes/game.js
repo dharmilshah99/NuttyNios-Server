@@ -6,7 +6,6 @@ import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
 import nut from '../characters/Nut.png'
 import hourglass from '../characters/Hourglass.png'
-import * as Colyseus from 'colyseus.js'
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -240,45 +239,47 @@ class Game extends Phaser.Scene {
         this.timerecord.text = this.game.timeLeft
 
         /* Use for deployment on server, read from nios */
-        // this.MessageHandler()
+        this.MessageHandler()
         // console.log(this.directionInput)
-        // this.checkNuttyMode()
-
-        // if(this.NuttyMode == 0)
-        // {   
-        //     this.NuttyModeLabel.setPosition(-10000, -10000)
-        //     if(this.Score == this.Currentscore){
-        //         this.checkMQTTKeyboardInput()         
-        //     }
-        // }
-        // else if(this.NuttyMode == 1)
-        // {   
-        //     this.NuttyModeLabel.setPosition(400, 450)
-        //     if(this.Score == this.Currentscore){
-        //         this.checkMQTTNuttyKeyboardInput()     
-        //     }
-        // }   
-
-        /* Use for local testing, keyboard inputs */
         this.checkNuttyMode()
 
-        if (this.NuttyMode == 0) {
+        if(this.NuttyMode == 0)
+        {   
             this.NuttyModeLabel.setPosition(-10000, -10000)
             this.nut.setPosition(-1000, -1000)
-            if (this.Score == this.Currentscore) {
-                this.checkKeyboardInput()
+            if(this.Score == this.Currentscore){
+                this.checkMQTTKeyboardInput()         
             }
         }
-        else if (this.NuttyMode == 1) {
+        else if(this.NuttyMode == 1)
+        {   
             this.NuttyModeLabel.setPosition(400, 475)
             this.nut.setPosition(395, 250)
-            if (this.Score == this.Currentscore) {
-                this.checkNuttyKeyboardInput()
+            if(this.Score == this.Currentscore){
+                this.checkMQTTNuttyKeyboardInput()     
             }
-        }
+        }   
 
-        // print out time left in game to console
-        console.log(this.game.timeLeft)
+        /* Use for local testing, keyboard inputs */
+        // this.checkNuttyMode()
+
+        // if (this.NuttyMode == 0) {
+        //     this.NuttyModeLabel.setPosition(-10000, -10000)
+        //     this.nut.setPosition(-1000, -1000)
+        //     if (this.Score == this.Currentscore) {
+        //         this.checkKeyboardInput()
+        //     }
+        // }
+        // else if (this.NuttyMode == 1) {
+        //     this.NuttyModeLabel.setPosition(400, 475)
+        //     this.nut.setPosition(395, 250)
+        //     if (this.Score == this.Currentscore) {
+        //         this.checkNuttyKeyboardInput()
+        //     }
+        // }
+
+        // // print out time left in game to console
+        // console.log(this.game.timeLeft)
     }
 
     // handles all incoming messages from websockets
