@@ -378,15 +378,19 @@ class Game extends Phaser.Scene {
     checkMQTTKeyboardInput() {
         if(this.game.directionInput !== undefined){
             if (this.game.directionInput.up && this.dir == 1) {
+                console.log(this.game.directionInput.up)
                 this.incrementScore()
             }
             if (this.game.directionInput.down && this.dir == 2) {
+                console.log(this.game.directionInput.down)
                 this.incrementScore()
             }
             if (this.game.directionInput.left && this.dir == 3) {
+                console.log(this.game.directionInput.left)
                 this.incrementScore()
             }
             if (this.game.directionInput.right && this.dir == 4) {
+                console.log(this.game.directionInput.right)
                 this.incrementScore()
             }
         }

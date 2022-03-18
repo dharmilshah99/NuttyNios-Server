@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import * as Colyseus from 'colyseus.js'
-import WebSocketHandler from '../utils/websockethandler';
 import WebFontFile from '../utils/WebFontFile';
 import frog from '../characters/Frog.png'
 import mummy from '../characters/Mummy.png'
@@ -223,7 +222,6 @@ export default class TitleScreen extends Phaser.Scene {
 		/* ============= Server Sync Helpers ============ */
 		// Create synchronised room sessiom
 		this.game.room = await this.client.joinOrCreate("my_room");
-		// console.log(this.game.room.sessionId);
 		this.uiSceneRunning = "titlescreen"
 
 		// State change handler
@@ -262,9 +260,8 @@ export default class TitleScreen extends Phaser.Scene {
 		});
 
 		this.game.room.onMessage("direction-input", (message) => {
-			console.log("direction received from server: " + message)
+			console.log("direction received from server: " + JSON.stringify(message))
 			this.game.directionInput = message
-			// this.sleepPreviousParallelScene("titlescreen")
 		});
 
 	
@@ -308,7 +305,6 @@ export default class TitleScreen extends Phaser.Scene {
 	playerSetUp(playerNum) {
 		this.nodeNum = (playerNum - 1).toString()
 		this.game.playerNum = playerNum.toString()
-		// this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
 		this.game.room.send("playerIdent", this.game.playerNum)
 
 		this.game.room.send("ready", this.game.playerNum)

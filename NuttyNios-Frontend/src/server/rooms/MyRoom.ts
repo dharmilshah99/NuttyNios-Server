@@ -1,7 +1,6 @@
 import { Room, Client } from "colyseus";
 import { MyRoomState } from "./schema/MyRoomState";
 import { Player } from "../utils/player";
-// import { MQTTHandler } from "../utils/mqtthandler";
 import * as mqtt from "mqtt"
 
 export class MyRoom extends Room<MyRoomState>{
@@ -16,27 +15,27 @@ export class MyRoom extends Room<MyRoomState>{
         super();
         this.playerMap = new Map<string, Player>();
         this.readyState = false;
-        // this.MQTTClient = new MQTTHandler("mosquitto-bridge", 1883);
 
         
         /* =========== MQTT =========== */
         this.MQTTClient = mqtt.connect('mqtt://'+this.hostname+":"+this.port.toString());
-        // this.MQTTClient = mqtt.connect('mqtt://test.mosquitto.org');
 
         this.MQTTClient.subscribe("node/0/data/direction")
         this.MQTTClient.subscribe("node/1/data/direction")
         this.MQTTClient.subscribe("node/2/data/direction")
         this.MQTTClient.subscribe("node/3/data/direction")
 
+        /* =========== Callbacks =========== */
         this.MQTTClient.on('connect', function(this: any){
             console.log('game-server connected to mqtt');
         });
         this.MQTTClient.on('error', function(){
             console.log("Error connecting to MQTT Bridge");
         });
-        this.MQTTClient.on('message', function(this: MyRoom, topic: string, message:any){
+
+        this.MQTTClient.on('message', function(this:MyRoom, topic: string, message:any){
             console.log("Received message from: " + topic + " "+ message.toString());
-            
+
             if(topic == "node/0/data/direction"){
                 this.messageHandler(1,message);
             }
@@ -49,7 +48,7 @@ export class MyRoom extends Room<MyRoomState>{
             else if(topic == "node/3/data/direction"){
                 this.messageHandler(4,message);
             }
-        });
+        }.bind(this));
 
         /* DEBUGGING */
         console.log("attempting to connect MQTT-game-server")
@@ -64,35 +63,35 @@ export class MyRoom extends Room<MyRoomState>{
 
         // reset state of input
         var directionInput = {
-            'up': false,
-            'left': false,
-            'right': false,
-            'down': false
+            up: false,
+            left: false,
+            right: false,
+            down: false
         }
 
-        var directionInputList = message.directions_moved
-        if (directionInputList !== undefined) {
-            for (let i = 0; i < directionInputList.length; i++) {
-                switch (directionInputList[i]) {
-                    case 0:
-                        directionInput.down = true
-                        break;
-                    case 1:
-                        directionInput.up = true
-                        break;
-                    case 2:
-                        directionInput.left = true
-                        break;
-                    case 3:
-                        directionInput.right = true
-                        break;
-                }
+        var directionInputList = JSON.parse(message.toString()).directions_moved
+        for (let i = 0; i < directionInputList.length; i++) {
+            switch (directionInputList[i]) {
+                case 0:
+                    directionInput.up = true
+                    break;
+                case 1:
+                    directionInput.up = true
+                    break;
+                case 2:
+                    directionInput.left = true
+                    break;
+                case 3:
+                    directionInput.right = true
+                    break;
             }
         }
 
         this.clients.forEach(function (client) {
-            if(client.userData.playerNumber == playerNum){
-                client.send("direction-input", directionInput)
+            if(client.userData !== undefined){
+                if(client.userData.playerNumber == playerNum){
+                    client.send("direction-input", directionInput)
+                }
             }
           }); 
     }
@@ -188,12 +187,9 @@ export class MyRoom extends Room<MyRoomState>{
                 console.log("start-successful")
                 this.broadcast("start-game", 1)
                 this.state.running = true;
-                // start the clock ticking
                 this.clock.start();
                 this.state.timeLeft = this.gameSessionDuration;
 
-                // Set an interval and store a reference to it
-                // so that we may clear it later
                 this.clock.setInterval(() => {
                     if (this.state.timeLeft > 0) {
                         this.state.timeLeft -= 1;
