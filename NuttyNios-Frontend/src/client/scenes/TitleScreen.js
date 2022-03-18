@@ -19,6 +19,8 @@ export default class TitleScreen extends Phaser.Scene {
 	constructor() {
 		super({ key: 'titlescreen' });
 		autoBind(this)
+		this.difficultySet = false
+		this.playerNumSet = false
 	}
 
 	init() {
@@ -284,28 +286,39 @@ export default class TitleScreen extends Phaser.Scene {
 		})
 
 		this.input.keyboard.once('keydown-E', () => {
-			this.game.room.send("difficulty", "0")
+			if(!this.difficultySet){
+				this.game.room.send("difficulty", "0")
+				console.log("easy selected")
+				this.difficultySet = true
+			}
 		})
 
 		this.input.keyboard.once('keydown-H', () => {
-			this.game.room.send("difficulty", "1")
+			if(!this.difficultySet){
+				this.game.room.send("difficulty", "1")
+				console.log("hard selected")
+				this.difficultySet = true
+			}
 		})
 	}
 
 	playerSetUp(playerNum){
-		this.nodeNum = (playerNum-1).toString()
-		this.game.playerNum = playerNum.toString()
-		this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
-		this.game.room.send("playerIdent", this.game.playerNum)
+		if(!this.playerNumSet){
+			this.playerNumSet = true
+			this.nodeNum = (playerNum-1).toString()
+			this.game.playerNum = playerNum.toString()
+			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+			this.game.room.send("playerIdent", this.game.playerNum)
 
-		// while(!this.game["direction"].isValid()){
-		// 	console.log("in while loop")
-		// 	if(this.game["direction"].isValid()){
-		// 		break;
-		// 	}
-		// }
-		// console.log("out of while loop")
-		this.game.room.send("ready", this.game.playerNum)
+			// while(!this.game["direction"].isValid()){
+			// 	console.log("in while loop")
+			// 	if(this.game["direction"].isValid()){
+			// 		break;
+			// 	}
+			// }
+			// console.log("out of while loop")
+			this.game.room.send("ready", this.game.playerNum)
+		}
 	}
 
 	TimerEvent() {

@@ -144,8 +144,9 @@ export class MyRoom extends Room<MyRoomState>{
         });
 
         this.onMessage("difficulty", (client, message) => {
+            console.log("difficulty "+message+ " selected")
             this.MQTTClient._publish("game/data/difficulty", message)
-        });
+        })
     }
 
 
