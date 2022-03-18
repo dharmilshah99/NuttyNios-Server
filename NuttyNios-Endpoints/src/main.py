@@ -2,6 +2,7 @@ import json
 import paho.mqtt.client as paho
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, WebSocketDisconnect, WebSocket
+import random
 
 from src.utils import *
 
@@ -9,7 +10,9 @@ from src.utils import *
 # Global Variable
 ###
 
-MQTT_CLIENT = paho.Client("NuttyNios-Endpoints")
+uniqueID = random.randint(0,9999)
+
+MQTT_CLIENT = paho.Client("NuttyNios-Endpoints" + str(uniqueID))
 HOSTNAME = "mosquitto-bridge"
 PORT = 1883
 
@@ -57,7 +60,6 @@ async def post_node_configuration(node_name: str, config_data: BoardConfiguratio
             coll.insert_one(config_data.dict())
     except ConnectionError as e:
         raise ConnectionError("Could not connect to DB")
-    return 200
     
 # Websocket Endpoints
 @app.websocket("/ws/node/{node_name}/data/{data_topic}")

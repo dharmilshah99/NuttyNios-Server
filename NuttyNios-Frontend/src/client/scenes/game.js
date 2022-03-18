@@ -6,7 +6,6 @@ import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
 import nut from '../characters/Nut.png'
 import hourglass from '../characters/Hourglass.png'
-import * as Colyseus from 'colyseus.js'
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -241,19 +240,21 @@ class Game extends Phaser.Scene {
 
         /* Use for deployment on server, read from nios */
         // this.MessageHandler()
-        // console.log(this.directionInput)
+        // // console.log(this.directionInput)
         // this.checkNuttyMode()
 
         // if(this.NuttyMode == 0)
         // {   
         //     this.NuttyModeLabel.setPosition(-10000, -10000)
+        //     this.nut.setPosition(-1000, -1000)
         //     if(this.Score == this.Currentscore){
         //         this.checkMQTTKeyboardInput()         
         //     }
         // }
         // else if(this.NuttyMode == 1)
         // {   
-        //     this.NuttyModeLabel.setPosition(400, 450)
+        //     this.NuttyModeLabel.setPosition(400, 475)
+        //     this.nut.setPosition(395, 250)
         //     if(this.Score == this.Currentscore){
         //         this.checkMQTTNuttyKeyboardInput()     
         //     }
@@ -277,8 +278,8 @@ class Game extends Phaser.Scene {
             }
         }
 
-        // print out time left in game to console
-        console.log(this.game.timeLeft)
+        // // print out time left in game to console
+        // console.log(this.game.timeLeft)
     }
 
     // handles all incoming messages from websockets
