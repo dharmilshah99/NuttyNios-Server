@@ -74,26 +74,3 @@ class MQTT(object):
             return message
         else:
             return None
-
-
-class ConnectionManager:
-    """Manages active sockets.
-    Taken from FastAPI Docs: https://fastapi.tiangolo.com/advanced/websockets/
-    """
-
-    def __init__(self):
-        self.active_connections: List[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket):
-        """Add websocket to active connections"""
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        """Remove websocket from active connections"""
-        self.active_connections.remove(websocket)
-
-    async def broadcast(self, message: str):
-        """Send message to all other websockets"""
-        for connection in self.active_connections:
-            await connection.send_text(message)
