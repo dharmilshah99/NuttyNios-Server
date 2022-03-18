@@ -261,6 +261,12 @@ export default class TitleScreen extends Phaser.Scene {
 			this.sleepPreviousParallelScene("titlescreen")
 		});
 
+		this.game.room.onMessage("direction-input", (message) => {
+			console.log("direction received from server: " + message)
+			this.game.directionInput = message
+			// this.sleepPreviousParallelScene("titlescreen")
+		});
+
 	
 		/* ============= Keyboard Input ============ */
 
@@ -302,7 +308,7 @@ export default class TitleScreen extends Phaser.Scene {
 	playerSetUp(playerNum) {
 		this.nodeNum = (playerNum - 1).toString()
 		this.game.playerNum = playerNum.toString()
-		this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+		// this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
 		this.game.room.send("playerIdent", this.game.playerNum)
 
 		this.game.room.send("ready", this.game.playerNum)
