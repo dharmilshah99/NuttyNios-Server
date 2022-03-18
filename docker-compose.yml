@@ -38,7 +38,7 @@ services:
     ports:
       - 18000:18000
     depends_on:
-      - mosquitto-bridge
+      - nuttynios-mongodb
 
   nuttynios-mongodb:
     image: mongo:latest
