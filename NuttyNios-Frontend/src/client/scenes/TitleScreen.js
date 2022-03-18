@@ -6,6 +6,8 @@ import frog from '../characters/Frog.png'
 import mummy from '../characters/Mummy.png'
 import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
+import greenbutton from '../characters/GreenButton.png'
+import redbutton from '../characters/RedButton.png'
 import autoBind from 'auto-bind';
 
 export default class TitleScreen extends Phaser.Scene {
@@ -32,6 +34,8 @@ export default class TitleScreen extends Phaser.Scene {
 		this.load.image('mummy', mummy)
 		this.load.image('ogre', ogre)
 		this.load.image('wizard', wizard)
+		this.load.image('greenbutton', greenbutton)
+		this.load.image('redbutton', redbutton)
 
 	}
 
@@ -221,6 +225,38 @@ export default class TitleScreen extends Phaser.Scene {
 		const wizard = this.add.image(697, 250, 'wizard')
 			.setOrigin(0.5, 0.5)
 			.setScale(1.2)
+
+		const greenbutton = this.add.image(103, 80, 'greenbutton')
+			.setOrigin(0.5, 0.5)
+			.setScale(0.45, 0.27)
+
+		const redbutton = this.add.image(697, 80, 'redbutton')
+			.setOrigin(0.5)
+			.setScale(0.45, 0.27)
+
+		this.modeinstruction = this.add.text(103, 77, 'PRESS E FOR', {
+			fontFamily: '  "Press Start 2P" ',
+			fontSize: 10
+		})
+			.setOrigin(0.5)
+
+		this.modeinstruction1 = this.add.text(103, 93, 'EASY MODE', {
+			fontFamily: '  "Press Start 2P" ',
+			fontSize: 10
+		})
+			.setOrigin(0.5)
+
+		this.modeinstruction2 = this.add.text(702, 75, 'PRESS H FOR', {
+			fontFamily: '  "Press Start 2P" ',
+			fontSize: 10
+		})
+			.setOrigin(0.5)
+
+		this.modeinstruction1 = this.add.text(702, 91, 'HARD MODE', {
+			fontFamily: '  "Press Start 2P" ',
+			fontSize: 10
+		})
+			.setOrigin(0.5)
 
 
 		this.input.keyboard.once('keydown-ONE', () => {
