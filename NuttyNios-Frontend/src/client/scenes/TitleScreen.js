@@ -8,6 +8,11 @@ import wizard from '../characters/wizard.png'
 import greenbutton from '../characters/GreenButton.png'
 import redbutton from '../characters/RedButton.png'
 import autoBind from 'auto-bind';
+import changecharacter from '../sound/change_character.mp3'
+import arcademusic from '../sound/background_music.mp3'
+import newround from '../sound/new_round.mp3'
+import titlescreenmusic from '../sound/titlescreen.mp3'
+import changemode from '../sound/change_mode.mp3'
 
 export default class TitleScreen extends Phaser.Scene {
 	refreshFrameTimer = Phaser.Time.TimerEvent;
@@ -35,7 +40,11 @@ export default class TitleScreen extends Phaser.Scene {
 		this.load.image('wizard', wizard)
 		this.load.image('greenbutton', greenbutton)
 		this.load.image('redbutton', redbutton)
-
+		this.load.audio('change_character', changecharacter)
+		this.load.audio('arcademusic', arcademusic)
+		this.load.audio('newround', newround)
+		this.load.audio('titlescreenmusic', titlescreenmusic)
+		this.load.audio('changemode', changemode)
 	}
 
 	sleepPreviousParallelScene(sceneToStart) {
@@ -70,6 +79,12 @@ export default class TitleScreen extends Phaser.Scene {
 		})
 
 		/* ============= UI ============ */
+		this.changemodemusic = this.sound.add('changemode')
+		this.arcademusic = this.sound.add('arcademusic')
+		this.newroundmusic = this.sound.add('newround')
+		this.titlescreenmusic = this.sound.add('titlescreenmusic')
+		this.titlescreenmusic.play()
+
 		this.backgroundelement4 = this.add.circle(400, 500, 700, 0x0380fc, 1)
 			.setOrigin(0.5, 0.5)
 		this.backgroundelement3 = this.add.circle(400, 500, 600, 0xfff86e, 1)
@@ -244,16 +259,21 @@ export default class TitleScreen extends Phaser.Scene {
 
 		// Message handlers
 		this.game.room.onMessage("start-game", (message) => {
+			this.newroundmusic.play()
+			this.titlescreenmusic.stop()
+			this.arcademusic.play()
 			console.log("starting game scene")
 			this.sleepPreviousParallelScene("game")
 		});
 
 		this.game.room.onMessage("end-game", (message) => {
+			this.arcademusic.stop()
 			console.log("starting gameover scene")
 			this.sleepPreviousParallelScene("gameover")
 		});
 
 		this.game.room.onMessage("new-game", (message) => {
+			this.newroundmusic.play()
 			console.log("starting titlescreen scene")
 			this.game.room.leave()
 			this.sleepPreviousParallelScene("titlescreen")
@@ -292,11 +312,13 @@ export default class TitleScreen extends Phaser.Scene {
 		})
 
 		this.input.keyboard.addListener('keydown-E', () => {
+			this.changemodemusic.play()
 			this.game.room.send("difficulty", "0")
 			console.log("easy selected")
 		})
 
 		this.input.keyboard.addListener('keydown-H', () => {
+			this.changemodemusic.play()
 			this.game.room.send("difficulty", "1")
 			console.log("hard selected")
 		})
@@ -312,21 +334,25 @@ export default class TitleScreen extends Phaser.Scene {
 
 	update() {
 		this.input.keyboard.once('keydown-ONE', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button1frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-TWO', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button2frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-THREE', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button3frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-FOUR', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button4frame.fillColor = 0x32a850
 		})

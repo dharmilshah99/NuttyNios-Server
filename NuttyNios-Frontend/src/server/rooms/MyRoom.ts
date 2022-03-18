@@ -6,7 +6,7 @@ import * as mqtt from "mqtt"
 export class MyRoom extends Room<MyRoomState>{
     private playerMap: Map<string, Player>;
     private readyState: boolean;
-    private gameSessionDuration: number = 20;
+    private gameSessionDuration: number = 60;
     private MQTTClient: mqtt.Client;
     private hostname: string = "mosquitto-bridge";
     private port: number = 1883;
@@ -200,7 +200,7 @@ export class MyRoom extends Room<MyRoomState>{
                         this.clock.clear();
                         this.clock.stop();
 
-                        this.publishScores();
+                        // this.publishScores();
                     }
                 }, 1000);
             }

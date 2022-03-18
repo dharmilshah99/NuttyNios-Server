@@ -6,6 +6,7 @@ import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
 import nut from '../characters/Nut.png'
 import hourglass from '../characters/Hourglass.png'
+import correctarrow from '../sound/correct_arrow.mp3'
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -28,9 +29,13 @@ class Game extends Phaser.Scene {
         this.load.image('wizard', wizard)
         this.load.image('nut', nut)
         this.load.image('hourglass', hourglass)
+        this.load.audio('correctarrow', correctarrow)
     }
 
     create() {
+        this.correctmusic = this.sound.add('correctarrow', {
+            volume: 20
+        })
         // create timer
         this.refreshFrameTimer = this.time.addEvent({
             callback: this.TimerEvent,
@@ -239,8 +244,6 @@ class Game extends Phaser.Scene {
         this.timerecord.text = this.game.timeLeft
 
         /* Use for deployment on server, read from nios */
-        // this.MessageHandler()
-        // console.log(this.directionInput)
         this.checkNuttyMode()
 
         if(this.NuttyMode == 0)
@@ -281,40 +284,6 @@ class Game extends Phaser.Scene {
         // // print out time left in game to console
         // console.log(this.game.timeLeft)
     }
-
-    // handles all incoming messages from websockets
-    // MessageHandler() {
-    //     // reset state of input
-    //     this.directionInput = {}
-    //     this.directionInput['up'] = false
-    //     this.directionInput['left'] = false
-    //     this.directionInput['right'] = false
-    //     this.directionInput['down'] = false
-
-    //     // update inputs
-    //     this.directionInputList = this.game["direction"].getMessage().directions_moved
-    //     if (this.directionInputList !== undefined) {
-    //         for (let i = 0; i < this.directionInputList.length; i++) {
-    //             switch (this.directionInputList[i]) {
-    //                 case 0:
-    //                     this.directionInput.down = true
-    //                     break;
-    //                 case 1:
-    //                     break;
-    //                     this.directionInput.up = true
-    //                 case 2:
-    //                     this.directionInput.left = true
-    //                     break;
-    //                 case 3:
-    //                     this.directionInput.right = true
-    //                     break;
-    //             }
-    //         }
-    //     }
-    //     // TODO: uncomment the following once messages are published to both topics
-    //     // this.buttonsInput = this.game["buttons"].getMessage().buttons
-    //     // this.switchesInput = this.game["switches"].getMessage().switches
-    // }
 
     // update scoreboard of every player
     updateScores() {
@@ -378,19 +347,15 @@ class Game extends Phaser.Scene {
     checkMQTTKeyboardInput() {
         if(this.game.directionInput !== undefined){
             if (this.game.directionInput.up && this.dir == 1) {
-                console.log(this.game.directionInput.up)
                 this.incrementScore()
             }
             if (this.game.directionInput.down && this.dir == 2) {
-                console.log(this.game.directionInput.down)
                 this.incrementScore()
             }
             if (this.game.directionInput.left && this.dir == 3) {
-                console.log(this.game.directionInput.left)
                 this.incrementScore()
             }
             if (this.game.directionInput.right && this.dir == 4) {
-                console.log(this.game.directionInput.right)
                 this.incrementScore()
             }
         }
@@ -414,15 +379,19 @@ class Game extends Phaser.Scene {
     checkKeyboardInput() {
         if (this.cursors.up.isDown && this.dir == 1) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         else if (this.cursors.down.isDown && this.dir == 2) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         else if (this.cursors.left.isDown && this.dir == 3) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         else if (this.cursors.right.isDown && this.dir == 4) {
             this.incrementScore()
+            this.correctmusic.play()
         }
     }
 
