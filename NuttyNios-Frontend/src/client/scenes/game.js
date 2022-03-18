@@ -6,6 +6,7 @@ import ogre from '../characters/Ogre.png'
 import wizard from '../characters/wizard.png'
 import nut from '../characters/Nut.png'
 import hourglass from '../characters/Hourglass.png'
+import correctarrow from '../sound/correct_arrow.mp3'
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -28,9 +29,13 @@ class Game extends Phaser.Scene {
         this.load.image('wizard', wizard)
         this.load.image('nut', nut)
         this.load.image('hourglass', hourglass)
+        this.load.audio('correctarrow', correctarrow)
     }
 
     create() {
+        this.correctmusic = this.sound.add('correctarrow', {
+            volume: 20
+        })
         // create timer
         this.refreshFrameTimer = this.time.addEvent({
             callback: this.TimerEvent,
@@ -378,15 +383,19 @@ class Game extends Phaser.Scene {
     checkMQTTKeyboardInput() {
         if (this.directionInput.up && this.dir == 1) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         if (this.directionInput.down && this.dir == 2) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         if (this.directionInput.left && this.dir == 3) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         if (this.directionInput.right && this.dir == 4) {
             this.incrementScore()
+            this.correctmusic.play()
         }
     }
 
@@ -408,15 +417,19 @@ class Game extends Phaser.Scene {
     checkKeyboardInput() {
         if (this.cursors.up.isDown && this.dir == 1) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         else if (this.cursors.down.isDown && this.dir == 2) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         else if (this.cursors.left.isDown && this.dir == 3) {
             this.incrementScore()
+            this.correctmusic.play()
         }
         else if (this.cursors.right.isDown && this.dir == 4) {
             this.incrementScore()
+            this.correctmusic.play()
         }
     }
 

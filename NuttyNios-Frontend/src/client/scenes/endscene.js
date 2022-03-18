@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import WebFontFile from '../utils/WebFontFile';
 import * as Colyseus from 'colyseus.js'
 import trophy from '../characters/Trophy.png'
+import game_over from '../sound/game_finish.mp3'
 
 export default class GameOver extends Phaser.Scene {
 	constructor() {
@@ -19,9 +20,12 @@ export default class GameOver extends Phaser.Scene {
 
 	preload() {
 		this.load.image('trophy', trophy)
+		this.load.audio('game_finish', game_over)
 	}
 
 	create() {
+		this.sound.play('game_finish')
+
 		this.refreshFrameTimer = this.time.addEvent({
 			callback: this.TimerEvent,
 			callbackScope: this,
@@ -216,7 +220,7 @@ export default class GameOver extends Phaser.Scene {
 			color: "#ffffff"
 		})
 			.setOrigin(0.5, 0.5)
-    
+
 		this.input.keyboard.once('keydown-SPACE', () => {
 			this.game.room.send("restart", 1)
 		})

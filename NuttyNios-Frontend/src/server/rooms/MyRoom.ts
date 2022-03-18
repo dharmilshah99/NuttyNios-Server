@@ -6,14 +6,14 @@ import { MQTTHandler } from "../utils/mqtthandler";
 export class MyRoom extends Room<MyRoomState>{
     private playerMap: Map<string, Player>;
     private readyState: boolean;
-    private gameSessionDuration: number = 20;
+    private gameSessionDuration: number = 10;
     private MQTTClient: MQTTHandler;
 
     constructor() {
         super();
         this.playerMap = new Map<string, Player>();
         this.readyState = false;
-        this.MQTTClient = new MQTTHandler("mosquitto-bridge", 1883);
+        // this.MQTTClient = new MQTTHandler("mosquitto-bridge", 1883);
 
         /* DEBUGGING */
         // console.log("attempting to connect MQTT-game-server")
@@ -132,7 +132,7 @@ export class MyRoom extends Room<MyRoomState>{
                         this.clock.clear();
                         this.clock.stop();
 
-                        this.publishScores();
+                        // this.publishScores();
                     }
                 }, 1000);
             }
@@ -145,7 +145,7 @@ export class MyRoom extends Room<MyRoomState>{
 
         this.onMessage("difficulty", (client, message) => {
             console.log("difficulty " + message + " selected")
-            this.MQTTClient._publish("game/data/difficulty", message)
+            // this.MQTTClient._publish("game/data/difficulty", message)
         })
     }
 

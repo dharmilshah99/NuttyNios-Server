@@ -9,6 +9,10 @@ import wizard from '../characters/wizard.png'
 import greenbutton from '../characters/GreenButton.png'
 import redbutton from '../characters/RedButton.png'
 import autoBind from 'auto-bind';
+import changecharacter from '../sound/change_character.mp3'
+import arcademusic from '../sound/background_music.mp3'
+import newround from '../sound/new_round.mp3'
+import titlescreenmusic from '../sound/titlescreen.mp3'
 
 export default class TitleScreen extends Phaser.Scene {
 	refreshFrameTimer = Phaser.Time.TimerEvent;
@@ -38,7 +42,10 @@ export default class TitleScreen extends Phaser.Scene {
 		this.load.image('wizard', wizard)
 		this.load.image('greenbutton', greenbutton)
 		this.load.image('redbutton', redbutton)
-
+		this.load.audio('change_character', changecharacter)
+		this.load.audio('arcademusic', arcademusic)
+		this.load.audio('newround', newround)
+		this.load.audio('titlescreenmusic', titlescreenmusic)
 	}
 
 	sleepPreviousParallelScene(sceneToStart) {
@@ -72,6 +79,9 @@ export default class TitleScreen extends Phaser.Scene {
 			loop: true
 		})
 
+		this.titlescreenmusic = this.sound.add('titlescreenmusic')
+		this.titlescreenmusic.play()
+
 		/* ============= Server Sync Helpers ============ */
 		// Create synchronised room sessiom
 		this.game.room = await this.client.joinOrCreate("my_room");
@@ -98,15 +108,21 @@ export default class TitleScreen extends Phaser.Scene {
 
 		// Message handlers
 		this.game.room.onMessage("start-game", (message) => {
+			this.titlescreenmusic.stop()
 			this.sleepPreviousParallelScene("game")
+			this.arcademusic = this.sound.add('arcademusic')
+			this.arcademusic.play()
 		});
 
 		this.game.room.onMessage("end-game", (message) => {
 			this.sleepPreviousParallelScene("gameover")
+			this.arcademusic.stop()
 		});
 
 		this.game.room.onMessage("new-game", (message) => {
 			this.game.room.leave()
+			this.newroundsound = this.sound.add('newround')
+			this.newroundsound.play()
 			this.sleepPreviousParallelScene("titlescreen")
 		});
 
@@ -352,21 +368,25 @@ export default class TitleScreen extends Phaser.Scene {
 
 	update() {
 		this.input.keyboard.once('keydown-ONE', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button1frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-TWO', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button2frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-THREE', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button3frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-FOUR', () => {
+			this.sound.play('change_character')
 			this.revertStatusColor()
 			this.button4frame.fillColor = 0x32a850
 		})
