@@ -72,7 +72,7 @@ export class MyRoom extends Room<MyRoomState>{
         this.state.playerScores.forEach((value, key) => {
             var nodeNum = parseInt(key) - 1;
             var topic = "node/"+nodeNum.toString()+"/data/score"
-            this.MQTTClient._publish(topic, value.toString())
+            this.MQTTClient._publish(topic, value)
         });
     }
 
