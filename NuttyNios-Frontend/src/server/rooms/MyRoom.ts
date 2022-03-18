@@ -107,7 +107,6 @@ export class MyRoom extends Room<MyRoomState>{
             let prevScore = this.state.playerScores.get(playerNumString);
             this.state.playerScores.set(playerNumString, prevScore + message);
             this.updateRank();
-            console.log(this.state.playerRank.get("4"))
         });
 
         this.onMessage("start-attempt", (client, message) => {

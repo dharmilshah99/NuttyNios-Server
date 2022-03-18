@@ -13,6 +13,7 @@ import changecharacter from '../sound/change_character.mp3'
 import arcademusic from '../sound/background_music.mp3'
 import newround from '../sound/new_round.mp3'
 import titlescreenmusic from '../sound/titlescreen.mp3'
+import changemode from '../sound/change_mode.mp3'
 
 export default class TitleScreen extends Phaser.Scene {
 	refreshFrameTimer = Phaser.Time.TimerEvent;
@@ -23,8 +24,6 @@ export default class TitleScreen extends Phaser.Scene {
 	constructor() {
 		super({ key: 'titlescreen' });
 		autoBind(this)
-		this.difficultySet = false
-		this.playerNumSet = false
 	}
 
 	init() {
@@ -46,6 +45,7 @@ export default class TitleScreen extends Phaser.Scene {
 		this.load.audio('arcademusic', arcademusic)
 		this.load.audio('newround', newround)
 		this.load.audio('titlescreenmusic', titlescreenmusic)
+		this.load.audio('changemode', changemode)
 	}
 
 	sleepPreviousParallelScene(sceneToStart) {
@@ -79,54 +79,13 @@ export default class TitleScreen extends Phaser.Scene {
 			loop: true
 		})
 
+		/* ============= UI ============ */
+		this.changemodemusic = this.sound.add('changemode')
+		this.arcademusic = this.sound.add('arcademusic')
+		this.newroundmusic = this.sound.add('newround')
 		this.titlescreenmusic = this.sound.add('titlescreenmusic')
 		this.titlescreenmusic.play()
 
-		/* ============= Server Sync Helpers ============ */
-		// Create synchronised room sessiom
-		this.game.room = await this.client.joinOrCreate("my_room");
-		// console.log(this.game.room.sessionId);
-		this.uiSceneRunning = "titlescreen"
-
-		// State change handler
-		this.game.room.onStateChange((newState) => {
-			this.game.playerScores = newState.playerScores
-			this.game.timeLeft = newState.timeLeft
-			this.game.playerRank = newState.playerRank
-
-			// console.log("Player 1: " + this.game.playerScores.get("1"))
-			// console.log("Player 2: " + this.game.playerScores.get("2"))
-			// console.log("Player 3: " + this.game.playerScores.get("3"))
-			// console.log("Player 4: " + this.game.playerScores.get("4"))
-
-			// console.log("Rank 1: " + this.game.playerRank.get("1"))
-			// console.log("Rank 2: " + this.game.playerRank.get("2"))
-			// console.log("Rank 3: " + this.game.playerRank.get("3"))
-			// console.log("Rank 4: " + this.game.playerRank.get("4"))
-
-		});
-
-		// Message handlers
-		this.game.room.onMessage("start-game", (message) => {
-			this.titlescreenmusic.stop()
-			this.sleepPreviousParallelScene("game")
-			this.arcademusic = this.sound.add('arcademusic')
-			this.arcademusic.play()
-		});
-
-		this.game.room.onMessage("end-game", (message) => {
-			this.sleepPreviousParallelScene("gameover")
-			this.arcademusic.stop()
-		});
-
-		this.game.room.onMessage("new-game", (message) => {
-			this.game.room.leave()
-			this.newroundsound = this.sound.add('newround')
-			this.newroundsound.play()
-			this.sleepPreviousParallelScene("titlescreen")
-		});
-
-		/* ============= UI ============ */
 		this.backgroundelement4 = this.add.circle(400, 500, 700, 0x0380fc, 1)
 			.setOrigin(0.5, 0.5)
 		this.backgroundelement3 = this.add.circle(400, 500, 600, 0xfff86e, 1)
@@ -270,58 +229,77 @@ export default class TitleScreen extends Phaser.Scene {
 		})
 			.setOrigin(0.5)
 
-		this.modeinstruction1 = this.add.text(702, 91, 'HARD MODE', {
+		this.modeinstruction3 = this.add.text(702, 91, 'HARD MODE', {
 			fontFamily: '  "Press Start 2P" ',
 			fontSize: 10
 		})
 			.setOrigin(0.5)
 
+		/* ============= Server Sync Helpers ============ */
+		// Create synchronised room sessiom
+		this.game.room = await this.client.joinOrCreate("my_room");
+		// console.log(this.game.room.sessionId);
+		this.uiSceneRunning = "titlescreen"
 
-		const redbutton = this.add.image(697, 80, 'redbutton')
-			.setOrigin(0.5)
-			.setScale(0.45, 0.27)
+		// State change handler
+		this.game.room.onStateChange((newState) => {
+			this.game.playerScores = newState.playerScores
+			this.game.timeLeft = newState.timeLeft
+			this.game.playerRank = newState.playerRank
 
-		this.modeinstruction = this.add.text(103, 77, 'PRESS E FOR', {
-			fontFamily: '  "Press Start 2P" ',
-			fontSize: 10
-		})
-			.setOrigin(0.5)
+			console.log("Player 1: " + this.game.playerScores.get("1"))
+			console.log("Player 2: " + this.game.playerScores.get("2"))
+			console.log("Player 3: " + this.game.playerScores.get("3"))
+			console.log("Player 4: " + this.game.playerScores.get("4"))
 
-		this.modeinstruction1 = this.add.text(103, 93, 'EASY MODE', {
-			fontFamily: '  "Press Start 2P" ',
-			fontSize: 10
-		})
-			.setOrigin(0.5)
+			console.log("Rank 1: " + this.game.playerRank.get("1"))
+			console.log("Rank 2: " + this.game.playerRank.get("2"))
+			console.log("Rank 3: " + this.game.playerRank.get("3"))
+			console.log("Rank 4: " + this.game.playerRank.get("4"))
 
-		this.modeinstruction2 = this.add.text(702, 75, 'PRESS H FOR', {
-			fontFamily: '  "Press Start 2P" ',
-			fontSize: 10
-		})
-			.setOrigin(0.5)
+		});
 
-		this.modeinstruction1 = this.add.text(702, 91, 'HARD MODE', {
-			fontFamily: '  "Press Start 2P" ',
-			fontSize: 10
-		})
-			.setOrigin(0.5)
+		// Message handlers
+		this.game.room.onMessage("start-game", (message) => {
+			this.newroundmusic.play()
+			this.titlescreenmusic.stop()
+			this.arcademusic.play()
+			console.log("starting game scene")
+			this.sleepPreviousParallelScene("game")
+		});
+
+		this.game.room.onMessage("end-game", (message) => {
+			this.arcademusic.stop()
+			console.log("starting gameover scene")
+			this.sleepPreviousParallelScene("gameover")
+		});
+
+		this.game.room.onMessage("new-game", (message) => {
+			this.newroundmusic.play()
+			console.log("starting titlescreen scene")
+			this.game.room.leave()
+			this.sleepPreviousParallelScene("titlescreen")
+		});
 
 
-		this.input.keyboard.once('keydown-ONE', () => {
+		/* ============= Keyboard Input ============ */
+
+		this.input.keyboard.addListener('keydown-ONE', () => {
 			// console.log("1 is pressed")
 			this.playerSetUp(1)
 		})
 
-		this.input.keyboard.once('keydown-TWO', () => {
+		this.input.keyboard.addListener('keydown-TWO', () => {
 			// console.log("2 is pressed")
 			this.playerSetUp(2)
 		})
 
-		this.input.keyboard.once('keydown-THREE', () => {
+		this.input.keyboard.addListener('keydown-THREE', () => {
 			// console.log("3 is pressed")
 			this.playerSetUp(3)
 		})
 
-		this.input.keyboard.once('keydown-FOUR', () => {
+		this.input.keyboard.addListener('keydown-FOUR', () => {
 			// console.log("4 is pressed")
 			this.playerSetUp(4)
 		})
@@ -330,40 +308,26 @@ export default class TitleScreen extends Phaser.Scene {
 			this.game.room.send("start-attempt", 1)
 		})
 
-		this.input.keyboard.once('keydown-E', () => {
-			if (!this.difficultySet) {
-				this.game.room.send("difficulty", "0")
-				console.log("easy selected")
-				this.difficultySet = true
-			}
+		this.input.keyboard.addListener('keydown-E', () => {
+			this.changemodemusic.play()
+			this.game.room.send("difficulty", "0")
+			console.log("easy selected")
 		})
 
-		this.input.keyboard.once('keydown-H', () => {
-			if (!this.difficultySet) {
-				this.game.room.send("difficulty", "1")
-				console.log("hard selected")
-				this.difficultySet = true
-			}
+		this.input.keyboard.addListener('keydown-H', () => {
+			this.changemodemusic.play()
+			this.game.room.send("difficulty", "1")
+			console.log("hard selected")
 		})
 	}
 
 	playerSetUp(playerNum) {
-		if (!this.playerNumSet) {
-			this.playerNumSet = true
-			this.nodeNum = (playerNum - 1).toString()
-			this.game.playerNum = playerNum.toString()
-			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
-			this.game.room.send("playerIdent", this.game.playerNum)
+		this.nodeNum = (playerNum - 1).toString()
+		this.game.playerNum = playerNum.toString()
+		this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+		this.game.room.send("playerIdent", this.game.playerNum)
 
-			// while(!this.game["direction"].isValid()){
-			// 	console.log("in while loop")
-			// 	if(this.game["direction"].isValid()){
-			// 		break;
-			// 	}
-			// }
-			// console.log("out of while loop")
-			this.game.room.send("ready", this.game.playerNum)
-		}
+		this.game.room.send("ready", this.game.playerNum)
 	}
 
 	update() {
@@ -390,6 +354,7 @@ export default class TitleScreen extends Phaser.Scene {
 			this.revertStatusColor()
 			this.button4frame.fillColor = 0x32a850
 		})
+
 	}
 
 	revertStatusColor() {
