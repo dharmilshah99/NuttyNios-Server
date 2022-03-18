@@ -19,8 +19,6 @@ export default class TitleScreen extends Phaser.Scene {
 	constructor() {
 		super({ key: 'titlescreen' });
 		autoBind(this)
-		this.difficultySet = false
-		this.playerNumSet = false
 	}
 
 	init() {
@@ -84,15 +82,15 @@ export default class TitleScreen extends Phaser.Scene {
 			this.game.timeLeft = newState.timeLeft
 			this.game.playerRank = newState.playerRank
 
-			// console.log("Player 1: " + this.game.playerScores.get("1"))
-			// console.log("Player 2: " + this.game.playerScores.get("2"))
-			// console.log("Player 3: " + this.game.playerScores.get("3"))
-			// console.log("Player 4: " + this.game.playerScores.get("4"))
+			console.log("Player 1: " + this.game.playerScores.get("1"))
+			console.log("Player 2: " + this.game.playerScores.get("2"))
+			console.log("Player 3: " + this.game.playerScores.get("3"))
+			console.log("Player 4: " + this.game.playerScores.get("4"))
 
-			// console.log("Rank 1: " + this.game.playerRank.get("1"))
-			// console.log("Rank 2: " + this.game.playerRank.get("2"))
-			// console.log("Rank 3: " + this.game.playerRank.get("3"))
-			// console.log("Rank 4: " + this.game.playerRank.get("4"))
+			console.log("Rank 1: " + this.game.playerRank.get("1"))
+			console.log("Rank 2: " + this.game.playerRank.get("2"))
+			console.log("Rank 3: " + this.game.playerRank.get("3"))
+			console.log("Rank 4: " + this.game.playerRank.get("4"))
 
 		});
 
@@ -290,85 +288,94 @@ export default class TitleScreen extends Phaser.Scene {
 			.setOrigin(0.5)
 
 
-		this.input.keyboard.once('keydown-ONE', () => {
-			// console.log("1 is pressed")
-			this.playerSetUp(1)
-		})
+		// this.input.keyboard.addListener('keydown-ONE', () => {
+		// 	// console.log("1 is pressed")
+		// 	this.playerSetUp(1)
+		// })
 
-		this.input.keyboard.once('keydown-TWO', () => {
-			// console.log("2 is pressed")
-			this.playerSetUp(2)
-		})
+		// this.input.keyboard.addListener('keydown-TWO', () => {
+		// 	// console.log("2 is pressed")
+		// 	this.playerSetUp(2)
+		// })
 
-		this.input.keyboard.once('keydown-THREE', () => {
-			// console.log("3 is pressed")
-			this.playerSetUp(3)
-		})
+		// this.input.keyboard.addListener('keydown-THREE', () => {
+		// 	// console.log("3 is pressed")
+		// 	this.playerSetUp(3)
+		// })
 
-		this.input.keyboard.once('keydown-FOUR', () => {
-			// console.log("4 is pressed")
-			this.playerSetUp(4)
-		})
+		// this.input.keyboard.addListener('keydown-FOUR', () => {
+		// 	// console.log("4 is pressed")
+		// 	this.playerSetUp(4)
+		// })
 
-		this.input.keyboard.addListener('keydown-SPACE', () => {
-			this.game.room.send("start-attempt", 1)
-		})
+		// this.input.keyboard.addListener('keydown-SPACE', () => {
+		// 	this.game.room.send("start-attempt", 1)
+		// })
 
-		this.input.keyboard.once('keydown-E', () => {
-			if (!this.difficultySet) {
-				this.game.room.send("difficulty", "0")
-				console.log("easy selected")
-				this.difficultySet = true
-			}
-		})
+		// this.input.keyboard.addListener('keydown-E', () => {
+		// 	this.game.room.send("difficulty", "0")
+		// 	console.log("easy selected")
+		// })
 
-		this.input.keyboard.once('keydown-H', () => {
-			if (!this.difficultySet) {
-				this.game.room.send("difficulty", "1")
-				console.log("hard selected")
-				this.difficultySet = true
-			}
-		})
+		// this.input.keyboard.addListener('keydown-H', () => {
+		// 	this.game.room.send("difficulty", "1")
+		// 	console.log("hard selected")
+		// })
 	}
 
 	playerSetUp(playerNum) {
-		if (!this.playerNumSet) {
-			this.playerNumSet = true
-			this.nodeNum = (playerNum - 1).toString()
-			this.game.playerNum = playerNum.toString()
-			this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
-			this.game.room.send("playerIdent", this.game.playerNum)
+		this.nodeNum = (playerNum - 1).toString()
+		this.game.playerNum = playerNum.toString()
+		this.game["direction"] = new WebSocketHandler("19000", this.nodeNum, "direction")
+		this.game.room.send("playerIdent", this.game.playerNum)
 
-			// while(!this.game["direction"].isValid()){
-			// 	console.log("in while loop")
-			// 	if(this.game["direction"].isValid()){
-			// 		break;
-			// 	}
-			// }
-			// console.log("out of while loop")
-			this.game.room.send("ready", this.game.playerNum)
-		}
+		// while(!this.game["direction"].isValid()){
+		// 	console.log("in while loop")
+		// 	if(this.game["direction"].isValid()){
+		// 		break;
+		// 	}
+		// }
+		// console.log("out of while loop")
+		this.game.room.send("ready", this.game.playerNum)
 	}
 
 	update() {
 		this.input.keyboard.once('keydown-ONE', () => {
+			this.playerSetUp(1)
 			this.revertStatusColor()
 			this.button1frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-TWO', () => {
+			this.playerSetUp(2)
 			this.revertStatusColor()
 			this.button2frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-THREE', () => {
+			this.playerSetUp(3)
 			this.revertStatusColor()
 			this.button3frame.fillColor = 0x32a850
 		})
 
 		this.input.keyboard.once('keydown-FOUR', () => {
+			this.playerSetUp(4)
 			this.revertStatusColor()
 			this.button4frame.fillColor = 0x32a850
+		})
+
+		this.input.keyboard.once('keydown-E', () => {
+			this.game.room.send("difficulty", "0")
+			console.log("easy selected")
+		})
+
+		this.input.keyboard.once('keydown-H', () => {
+			this.game.room.send("difficulty", "1")
+			console.log("hard selected")
+		})
+
+		this.input.keyboard.once('keydown-SPACE', () => {
+			this.game.room.send("start-attempt", 1)
 		})
 	}
 
