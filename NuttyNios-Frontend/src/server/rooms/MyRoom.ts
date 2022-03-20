@@ -34,7 +34,6 @@ export class MyRoom extends Room<MyRoomState>{
         });
 
         this.MQTTClient.on('message', function(this:MyRoom, topic: string, message:any){
-            console.log("Received message from: " + topic + " "+ message.toString());
 
             if(topic == "node/0/data/direction"){
                 this.messageHandler(1,message);
@@ -51,12 +50,11 @@ export class MyRoom extends Room<MyRoomState>{
         }.bind(this));
 
         /* DEBUGGING */
-        console.log("attempting to connect MQTT-game-server")
-        this.MQTTClient.subscribe("node/0/data/score");
-        this.MQTTClient.subscribe("node/1/data/score");
-        this.MQTTClient.subscribe("node/2/data/score");
-        this.MQTTClient.subscribe("node/3/data/score");
-        this.MQTTClient.subscribe("game/data/difficulty");
+        // this.MQTTClient.subscribe("node/0/data/score");
+        // this.MQTTClient.subscribe("node/1/data/score");
+        // this.MQTTClient.subscribe("node/2/data/score");
+        // this.MQTTClient.subscribe("node/3/data/score");
+        // this.MQTTClient.subscribe("game/data/difficulty");
     }
 
     private messageHandler(playerNum:number, message:any){
@@ -200,7 +198,7 @@ export class MyRoom extends Room<MyRoomState>{
                         this.clock.clear();
                         this.clock.stop();
 
-                        // this.publishScores();
+                        this.publishScores();
                     }
                 }, 1000);
             }

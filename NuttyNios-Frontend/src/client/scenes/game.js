@@ -334,7 +334,6 @@ class Game extends Phaser.Scene {
     }
 
     checkNuttyMode() {
-        // TODO: change to input from this.buttonsInput
         this.input.keyboard.once('keydown-SHIFT', () => {
             this.NuttyMode = !this.NuttyMode
         })
@@ -362,17 +361,19 @@ class Game extends Phaser.Scene {
     }
 
     checkMQTTNuttyKeyboardInput() {
-        if (this.game.directionInput.up && this.dir == 2) {
-            this.incrementScore()
-        }
-        if (this.game.directionInput.down && this.dir == 1) {
-            this.incrementScore()
-        }
-        if (this.game.directionInput.left && this.dir == 4) {
-            this.incrementScore()
-        }
-        if (this.game.directionInput.right && this.dir == 3) {
-            this.incrementScore()
+        if(this.game.directionInput !== undefined){
+            if (this.game.directionInput.up && this.dir == 2) {
+                this.incrementScore()
+            }
+            if (this.game.directionInput.down && this.dir == 1) {
+                this.incrementScore()
+            }
+            if (this.game.directionInput.left && this.dir == 4) {
+                this.incrementScore()
+            }
+            if (this.game.directionInput.right && this.dir == 3) {
+                this.incrementScore()
+            }
         }
     }
 
