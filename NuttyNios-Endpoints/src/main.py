@@ -19,8 +19,6 @@ PORT = 1883
 MONGO_HOSTNAME = "nuttynios-mongodb"
 MONGO_PORT = 27017
 
-Manager = ConnectionManager()
-
 ###
 # App
 ###
