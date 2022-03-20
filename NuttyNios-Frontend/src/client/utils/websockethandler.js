@@ -12,6 +12,7 @@ export default class WebSocketHandler
 		this.ws.onopen = this._onOpen;
 		this.ws.onclose = this._onClose;
 		this.ws.onerror = this._onError;
+        this.ws.valid = false
 		this.ws.onmessage = this._onMQTTMessage;
         autoBind(this);
 	}
@@ -23,8 +24,9 @@ export default class WebSocketHandler
 
     // An event listener to be called when a message is received from the server
     _onMQTTMessage(event){
-        console.log("message received");
+        // console.log("message received");
         this.incomingdata = JSON.parse(event.data.toString());
+        this.valid = true
         console.log(JSON.stringify(this.incomingdata))
     }
     
@@ -43,5 +45,9 @@ export default class WebSocketHandler
     // used by client to get message in game.js
     getMessage(){
         return this.ws.incomingdata
+    }
+
+    isValid(){
+        return this.ws.valid
     }
 }

@@ -2,6 +2,7 @@ import json
 import paho.mqtt.client as paho
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, WebSocketDisconnect, WebSocket
+import random
 
 from src.utils import *
 
@@ -9,7 +10,9 @@ from src.utils import *
 # Global Variable
 ###
 
-MQTT_CLIENT = paho.Client("NuttyNios-Endpoints")
+uniqueID = random.randint(0,9999)
+
+MQTT_CLIENT = paho.Client("NuttyNios-Endpoints" + str(uniqueID))
 HOSTNAME = "mosquitto-bridge"
 PORT = 1883
 
@@ -57,22 +60,3 @@ async def post_node_configuration(node_name: str, config_data: BoardConfiguratio
             coll.insert_one(config_data.dict())
     except ConnectionError as e:
         raise ConnectionError("Could not connect to DB")
-    return 200
-    
-# Websocket Endpoints
-@app.websocket("/ws/node/{node_name}/data/{data_topic}")
-async def get_datastream(websocket: WebSocket, node_name: str, data_topic: str):
-    await Manager.connect(websocket)
-    # Initialize Client
-    MQTTClient = MQTT(client=MQTT_CLIENT, hostname=HOSTNAME,
-                      port=PORT, topic=f"node/{node_name}/data/{data_topic}")
-    MQTTClient.start()
-    # Accept Websocket and Publish
-    try:
-        while True:
-            payload = MQTTClient.get_message()
-            if payload is not None:
-                await websocket.send_json(json.loads(payload))
-    except WebSocketDisconnect:
-        Manager.disconnect(websocket)
-        # TODO: Broadcast disconnections?
