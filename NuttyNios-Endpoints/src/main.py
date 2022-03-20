@@ -60,21 +60,3 @@ async def post_node_configuration(node_name: str, config_data: BoardConfiguratio
             coll.insert_one(config_data.dict())
     except ConnectionError as e:
         raise ConnectionError("Could not connect to DB")
-    
-# Websocket Endpoints
-@app.websocket("/ws/node/{node_name}/data/{data_topic}")
-async def get_datastream(websocket: WebSocket, node_name: str, data_topic: str):
-    await Manager.connect(websocket)
-    # Initialize Client
-    MQTTClient = MQTT(client=MQTT_CLIENT, hostname=HOSTNAME,
-                      port=PORT, topic=f"node/{node_name}/data/{data_topic}")
-    MQTTClient.start()
-    # Accept Websocket and Publish
-    try:
-        while True:
-            payload = MQTTClient.get_message()
-            if payload is not None:
-                await websocket.send_json(json.loads(payload))
-    except WebSocketDisconnect:
-        Manager.disconnect(websocket)
-        # TODO: Broadcast disconnections?
