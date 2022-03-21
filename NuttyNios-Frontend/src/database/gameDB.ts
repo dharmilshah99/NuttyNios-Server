@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
+const ObjectId = require( 'mongodb' ).ObjectId;
 
 export default class GameDB {
-    constructor(public name: string, public score: number, public rank: number, public id?: ObjectId) {}
+    constructor(public gameID: ObjectId, public playerNum: number, public score: number, public id?: ObjectId) {}
 }

@@ -3,6 +3,9 @@ import { MyRoomState } from "./schema/MyRoomState";
 import { Player } from "../utils/player";
 import * as mqtt from "mqtt"
 
+import { collections, connectToDatabase } from "../../database/DB.service";
+const ObjectId = require( 'mongodb' ).ObjectId;
+
 export class MyRoom extends Room<MyRoomState>{
     private playerMap: Map<string, Player>;
     private readyState: boolean;
@@ -138,7 +141,7 @@ export class MyRoom extends Room<MyRoomState>{
         }
     }
 
-    private publishScores() {
+    private publishScoresToNodes() {
         this.state.playerScores.forEach((value, key) => {
             var nodeNum = parseInt(key) - 1;
             var topic = "node/" + nodeNum.toString() + "/data/score"
@@ -146,8 +149,19 @@ export class MyRoom extends Room<MyRoomState>{
         });
     }
 
+    private publishScorestoDB() {
+        let _gameID = ObjectId();
+        this.state.playerScores.forEach((value, key) => {
+            collections.games.insertOne({gameID:_gameID, playerNum: parseInt(key), score: value})
+        });
+    }
+
     onCreate(options: any) {
         console.log("onCreate executed")
+
+        /* ===== Connect to Database ====== */
+        connectToDatabase()
+
         this.setState(new MyRoomState());
 
         this.onMessage("ready", (client, message) => {
@@ -198,8 +212,9 @@ export class MyRoom extends Room<MyRoomState>{
                         this.clock.clear();
                         this.clock.stop();
 
-                        this.publishScores();
-                    }
+                        this.publishScoresToNodes();
+                        this.publishScorestoDB();
+                    }   
                 }, 1000);
             }
         });
@@ -214,6 +229,7 @@ export class MyRoom extends Room<MyRoomState>{
             this.MQTTClient.publish("game/data/difficulty", message)
         });
     }
+    
 
 
     onJoin(client: Client, options: any) {
